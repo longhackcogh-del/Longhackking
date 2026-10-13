@@ -1,140 +1,81 @@
 #include "Sach.h"
+#include "NhapXuat.h"
 #include "ThuatToan.h"
 
-#include <iomanip>
-#include <stdexcept>
-
-Sach::Sach()
-    : TaiLieu()
-{
-    tacGia = "Chua nhap";
-    theLoai = "Chua nhap";
-    ISBN = "Chua nhap";
-    soTrang = 1;
+//=====ham khoi tao=====
+Sach::Sach(){
+    tacGia = "";
+    theLoai = "";
+    ISBN = "";
+    soTrang = 0;
 }
 
-Sach::Sach(
-    std::string ma,
-    std::string ten,
-    std::string nxb,
-    int nam,
-    int tong,
-    int con,
-    double gia,
-    std::string tacGia,
-    std::string theLoai,
-    std::string ISBN,
-    int soTrang
-)
-    : TaiLieu(
-        ma,
-        ten,
-        nxb,
-        nam,
-        tong,
-        con,
-        gia
-    )
-{
-    if (!chuoiHopLe(tacGia))
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
-    }
-
-    if (!chuoiHopLe(theLoai))
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
-    }
-
-    if (!chuoiHopLe(ISBN))
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
-    }
-
-    if (soTrang <= 0)
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
-    }
-
+Sach::Sach(std::string ma, std::string ten, std::string nxb,
+              int nam, int tong, int con, double gia, std::string tacGia, std::string theLoai, std::string ISBN, int soTrang)
+    : TaiLieu(ma, ten, nxb, nam, tong, con, gia){
     this->tacGia = tacGia;
     this->theLoai = theLoai;
     this->ISBN = ISBN;
     this->soTrang = soTrang;
 }
 
-Sach::~Sach()
-{
+Sach::~Sach(){
 }
 
-void Sach::nhap(std::istream& luong)
-{
-    // Nhap vao ban tam de du lieu loi khong lam doi doi tuong hien tai.
+bool Sach::hopLe() const{
+    return TaiLieu::hopLe() && chuoiHopLe(tacGia) && chuoiHopLe(theLoai) && chuoiHopLe(ISBN) && soTrang > 0;
+}
+
+//=====ham nhap=====
+bool Sach::nhap(std::istream& luong){
     Sach tam;
-    tam.TaiLieu::nhap(luong);
-
-    luong >> std::quoted(tam.tacGia);
-    luong >> std::quoted(tam.theLoai);
-    luong >> std::quoted(tam.ISBN);
-    luong >> tam.soTrang;
-
-    if (!luong)
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
+    if(!tam.TaiLieu::nhap(luong)){
+        return false;
     }
-
-    if (!chuoiHopLe(tam.tacGia))
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
+    if(!nhapChuoi(luong, "Nhap tac gia: ", tam.tacGia)){
+        return false;
     }
-
-    if (!chuoiHopLe(tam.theLoai))
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
+    if(!nhapChuoi(luong, "Nhap the loai: ", tam.theLoai)){
+        return false;
     }
-
-    if (!chuoiHopLe(tam.ISBN))
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
+    if(!nhapChuoi(luong, "Nhap ISBN: ", tam.ISBN)){
+        return false;
     }
-
-    if (tam.soTrang <= 0)
-    {
-        throw std::invalid_argument("Thong tin Sach khong hop le");
+    if(!nhapSo(luong, "Nhap so trang: ", tam.soTrang)){
+        return false;
     }
-
+    if(!tam.hopLe()){
+        return false;
+    }
     *this = tam;
+    return true;
 }
 
-void Sach::xuat() const
-{
+//=====ham xuat=====
+void Sach::xuat() const{
     xuatChung();
-    std::cout << " |";
-    std::cout << ' ' << std::quoted(tacGia);
-    std::cout << ' ' << std::quoted(theLoai);
-    std::cout << ' ' << std::quoted(ISBN);
-    std::cout << ' ' << soTrang;
-    std::cout << '\n';
+    std::cout << "tac gia: " << tacGia << '\n';
+    std::cout << "the loai: " << theLoai << '\n';
+    std::cout << "ISBN: " << ISBN << '\n';
+    std::cout << "so trang: " << soTrang << '\n';
 }
 
-double Sach::tinhTienPhat(int soNgayTre) const
-{
+//=====ham tinh tien phat=====
+double Sach::tinhTienPhat(int soNgayTre) const{
     int ngayTre = timMax(0, soNgayTre);
     double tienPhat = static_cast<double>(ngayTre) * 2000;
-
     return tienPhat;
 }
 
-std::string Sach::layLoai() const
-{
+std::string Sach::layLoai() const{
     return "Sach";
 }
 
-void Sach::ghi(std::ostream& tep) const
-{
+//=====ham ghi tep=====
+void Sach::ghi(std::ostream& tep) const{
     ghiChung(tep);
-    tep << ' ' << std::quoted(tacGia);
-    tep << ' ' << std::quoted(theLoai);
-    tep << ' ' << std::quoted(ISBN);
-    tep << ' ' << soTrang;
-    tep << '\n';
+    tep << tacGia << '\n';
+    tep << theLoai << '\n';
+    tep << ISBN << '\n';
+    tep << soTrang << '\n';
 }

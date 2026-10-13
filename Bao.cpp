@@ -1,108 +1,67 @@
 #include "Bao.h"
+#include "NhapXuat.h"
 #include "ThuatToan.h"
 
-#include <iomanip>
-#include <stdexcept>
-
-Bao::Bao()
-    : TaiLieu()
-{
-    ngayPhatHanh = "01/01/2000";
-    loaiBao = "Chua nhap";
+//=====ham khoi tao=====
+Bao::Bao(){
+    ngayPhatHanh = "";
+    loaiBao = "";
 }
 
-Bao::Bao(
-    std::string ma,
-    std::string ten,
-    std::string nxb,
-    int nam,
-    int tong,
-    int con,
-    double gia,
-    std::string ngayPhatHanh,
-    std::string loaiBao
-)
-    : TaiLieu(
-        ma,
-        ten,
-        nxb,
-        nam,
-        tong,
-        con,
-        gia
-    )
-{
-    if (!ngayHopLe(ngayPhatHanh))
-    {
-        throw std::invalid_argument("Thong tin Bao khong hop le");
-    }
-
-    if (!chuoiHopLe(loaiBao))
-    {
-        throw std::invalid_argument("Thong tin Bao khong hop le");
-    }
-
+Bao::Bao(std::string ma, std::string ten, std::string nxb,
+              int nam, int tong, int con, double gia, std::string ngayPhatHanh, std::string loaiBao)
+    : TaiLieu(ma, ten, nxb, nam, tong, con, gia){
     this->ngayPhatHanh = ngayPhatHanh;
     this->loaiBao = loaiBao;
 }
 
-Bao::~Bao()
-{
+Bao::~Bao(){
 }
 
-void Bao::nhap(std::istream& luong)
-{
-    // Nhap vao ban tam de du lieu loi khong lam doi doi tuong hien tai.
+bool Bao::hopLe() const{
+    return TaiLieu::hopLe() && ngayHopLe(ngayPhatHanh) && chuoiHopLe(loaiBao);
+}
+
+//=====ham nhap=====
+bool Bao::nhap(std::istream& luong){
     Bao tam;
-    tam.TaiLieu::nhap(luong);
-
-    luong >> std::quoted(tam.ngayPhatHanh);
-    luong >> std::quoted(tam.loaiBao);
-
-    if (!luong)
-    {
-        throw std::invalid_argument("Thong tin Bao khong hop le");
+    if(!tam.TaiLieu::nhap(luong)){
+        return false;
     }
-
-    if (!ngayHopLe(tam.ngayPhatHanh))
-    {
-        throw std::invalid_argument("Thong tin Bao khong hop le");
+    if(!nhapChuoi(luong, "Nhap ngay phat hanh (dd/mm/yyyy): ", tam.ngayPhatHanh)){
+        return false;
     }
-
-    if (!chuoiHopLe(tam.loaiBao))
-    {
-        throw std::invalid_argument("Thong tin Bao khong hop le");
+    if(!nhapChuoi(luong, "Nhap loai bao: ", tam.loaiBao)){
+        return false;
     }
-
+    if(!tam.hopLe()){
+        return false;
+    }
     *this = tam;
+    return true;
 }
 
-void Bao::xuat() const
-{
+//=====ham xuat=====
+void Bao::xuat() const{
     xuatChung();
-    std::cout << " |";
-    std::cout << ' ' << std::quoted(ngayPhatHanh);
-    std::cout << ' ' << std::quoted(loaiBao);
-    std::cout << '\n';
+    std::cout << "ngay phat hanh (dd/mm/yyyy): " << ngayPhatHanh << '\n';
+    std::cout << "loai bao: " << loaiBao << '\n';
 }
 
-double Bao::tinhTienPhat(int soNgayTre) const
-{
+//=====ham tinh tien phat=====
+double Bao::tinhTienPhat(int soNgayTre) const{
     int ngayTre = timMax(0, soNgayTre);
     double tienPhat = static_cast<double>(ngayTre) * 1000;
-
     return tienPhat;
 }
 
-std::string Bao::layLoai() const
-{
+std::string Bao::layLoai() const{
     return "Bao";
 }
 
-void Bao::ghi(std::ostream& tep) const
-{
+//=====ham ghi tep=====
+void Bao::ghi(std::ostream& tep) const{
     ghiChung(tep);
-    tep << ' ' << std::quoted(ngayPhatHanh);
-    tep << ' ' << std::quoted(loaiBao);
-    tep << '\n';
+    tep << ngayPhatHanh << '\n';
+    tep << loaiBao << '\n';
 }

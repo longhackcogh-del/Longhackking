@@ -1,134 +1,74 @@
 #include "TapChi.h"
+#include "NhapXuat.h"
 #include "ThuatToan.h"
 
-#include <iomanip>
-#include <stdexcept>
-
-TapChi::TapChi()
-    : TaiLieu()
-{
-    soPhatHanh = 1;
-    thangPhatHanh = 1;
-    linhVuc = "Chua nhap";
+//=====ham khoi tao=====
+TapChi::TapChi(){
+    soPhatHanh = 0;
+    thangPhatHanh = 0;
+    linhVuc = "";
 }
 
-TapChi::TapChi(
-    std::string ma,
-    std::string ten,
-    std::string nxb,
-    int nam,
-    int tong,
-    int con,
-    double gia,
-    int soPhatHanh,
-    int thangPhatHanh,
-    std::string linhVuc
-)
-    : TaiLieu(
-        ma,
-        ten,
-        nxb,
-        nam,
-        tong,
-        con,
-        gia
-    )
-{
-    if (soPhatHanh <= 0)
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
-    }
-
-    if (thangPhatHanh < 1)
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
-    }
-
-    if (thangPhatHanh > 12)
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
-    }
-
-    if (!chuoiHopLe(linhVuc))
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
-    }
-
+TapChi::TapChi(std::string ma, std::string ten, std::string nxb,
+              int nam, int tong, int con, double gia, int soPhatHanh, int thangPhatHanh, std::string linhVuc)
+    : TaiLieu(ma, ten, nxb, nam, tong, con, gia){
     this->soPhatHanh = soPhatHanh;
     this->thangPhatHanh = thangPhatHanh;
     this->linhVuc = linhVuc;
 }
 
-TapChi::~TapChi()
-{
+TapChi::~TapChi(){
 }
 
-void TapChi::nhap(std::istream& luong)
-{
-    // Nhap vao ban tam de du lieu loi khong lam doi doi tuong hien tai.
+bool TapChi::hopLe() const{
+    return TaiLieu::hopLe() && soPhatHanh > 0 && thangPhatHanh >= 1 && thangPhatHanh <= 12 && chuoiHopLe(linhVuc);
+}
+
+//=====ham nhap=====
+bool TapChi::nhap(std::istream& luong){
     TapChi tam;
-    tam.TaiLieu::nhap(luong);
-
-    luong >> tam.soPhatHanh;
-    luong >> tam.thangPhatHanh;
-    luong >> std::quoted(tam.linhVuc);
-
-    if (!luong)
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
+    if(!tam.TaiLieu::nhap(luong)){
+        return false;
     }
-
-    if (tam.soPhatHanh <= 0)
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
+    if(!nhapSo(luong, "Nhap so phat hanh: ", tam.soPhatHanh)){
+        return false;
     }
-
-    if (tam.thangPhatHanh < 1)
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
+    if(!nhapSo(luong, "Nhap thang phat hanh: ", tam.thangPhatHanh)){
+        return false;
     }
-
-    if (tam.thangPhatHanh > 12)
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
+    if(!nhapChuoi(luong, "Nhap linh vuc: ", tam.linhVuc)){
+        return false;
     }
-
-    if (!chuoiHopLe(tam.linhVuc))
-    {
-        throw std::invalid_argument("Thong tin TapChi khong hop le");
+    if(!tam.hopLe()){
+        return false;
     }
-
     *this = tam;
+    return true;
 }
 
-void TapChi::xuat() const
-{
+//=====ham xuat=====
+void TapChi::xuat() const{
     xuatChung();
-    std::cout << " |";
-    std::cout << ' ' << soPhatHanh;
-    std::cout << ' ' << thangPhatHanh;
-    std::cout << ' ' << std::quoted(linhVuc);
-    std::cout << '\n';
+    std::cout << "so phat hanh: " << soPhatHanh << '\n';
+    std::cout << "thang phat hanh: " << thangPhatHanh << '\n';
+    std::cout << "linh vuc: " << linhVuc << '\n';
 }
 
-double TapChi::tinhTienPhat(int soNgayTre) const
-{
+//=====ham tinh tien phat=====
+double TapChi::tinhTienPhat(int soNgayTre) const{
     int ngayTre = timMax(0, soNgayTre);
     double tienPhat = static_cast<double>(ngayTre) * 3000;
-
     return tienPhat;
 }
 
-std::string TapChi::layLoai() const
-{
+std::string TapChi::layLoai() const{
     return "TapChi";
 }
 
-void TapChi::ghi(std::ostream& tep) const
-{
+//=====ham ghi tep=====
+void TapChi::ghi(std::ostream& tep) const{
     ghiChung(tep);
-    tep << ' ' << soPhatHanh;
-    tep << ' ' << thangPhatHanh;
-    tep << ' ' << std::quoted(linhVuc);
-    tep << '\n';
+    tep << soPhatHanh << '\n';
+    tep << thangPhatHanh << '\n';
+    tep << linhVuc << '\n';
 }
