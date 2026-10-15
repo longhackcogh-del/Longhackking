@@ -1,0 +1,14 @@
+THUVIEN_2
+1
+N_D2
+Nguyen Giang Vien
+01/01/1980
+gv@dh.edu
+0901234568
+D2
+1
+1
+GV_D2
+CNTT
+Tien si
+10

@@ -7,9 +7,11 @@
 #include <fstream>
 #include <sstream>
 #include "Tep.h"
+#include "QuanLyPhieuMuon.h"
 
 QuanLyTaiLieu::QuanLyTaiLieu(){
     kiemTraPhieuMuon = nullptr;
+    phieuMuon = nullptr;
 }
 
 QuanLyTaiLieu::~QuanLyTaiLieu(){
@@ -24,6 +26,10 @@ void QuanLyTaiLieu::ganKiemTraPhieuMuon(bool (*ham)(const std::string&)){
 
 bool QuanLyTaiLieu::dangMuon(const TaiLieu& taiLieu) const{
     if (taiLieu.laySoLuongCon() < taiLieu.laySoLuongTong()){
+        return true;
+    }
+
+    if(phieuMuon != nullptr && phieuMuon->demDangMuonTaiLieu(taiLieu.layMa()) > 0){
         return true;
     }
 
@@ -50,6 +56,10 @@ bool QuanLyTaiLieu::them(TaiLieu* taiLieu){
     }
 
     if(!taiLieu->hopLe() || timViTri(taiLieu->layMa()) != -1){
+        return false;
+    }
+
+    if(phieuMuon != nullptr && phieuMuon->coThamChieuTaiLieu(taiLieu->layMa())){
         return false;
     }
 
@@ -238,6 +248,11 @@ void QuanLyTaiLieu::thongKe(std::ostream& luong) const{
     }
 }
 
+
+//=====ham gan danh sach phieu=====
+void QuanLyTaiLieu::ganQuanLyPhieuMuon(const QuanLyPhieuMuon* quanLy){
+    phieuMuon = quanLy;
+}
 
 //=====ham tim kiem nhi phan=====
 TaiLieu* QuanLyTaiLieu::timNhiPhan(const std::string& ma) const{
