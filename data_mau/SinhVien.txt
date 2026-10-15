@@ -1,0 +1,26 @@
+THUVIEN_2
+2
+N_D1
+Nguyen Sinh Vien
+01/01/2004
+sv@dh.edu
+0901234567
+D1
+1
+1
+SV_D1
+CT01
+CNTT
+Phan mem
+N_DX
+Nguyen Sinh Vien
+01/01/2004
+sv@dh.edu
+0901234567
+DX
+0
+0
+SV_DX
+CT01
+CNTT
+Phan mem
