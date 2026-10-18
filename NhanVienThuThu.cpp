@@ -65,7 +65,9 @@ void NhanVienThuThu::xuatNhanVienRieng() const{
     std::cout << "Ma nhan vien: " << maNhanVien << '\n';
     std::cout << "Ca lam viec: " << caLamViec << '\n';
     std::cout << "Chuc vu: " << chucVu << '\n';
-    std::cout << "Luong co ban: " << luongCoBan << '\n';
+    std::cout << "Luong co ban: ";
+    xuatTien(std::cout, luongCoBan);
+    std::cout << '\n';
     std::cout << "He so luong: " << heSoLuong << '\n';
 }
 

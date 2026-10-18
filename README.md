@@ -1,5 +1,47 @@
 # Hệ thống Quản lý Thư viện Đại học
 
+## Chạy ứng dụng tích hợp — giai đoạn 1
+
+Mở terminal PowerShell tại thư mục dự án trong VS Code. Cần `g++` hỗ trợ C++17 trong `PATH`:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1
+.\build\tich-hop\thuVien.exe
+```
+
+Chỉ chạy executable khi bước biên dịch thành công. Script dùng `-std=c++17 -Wall -Wextra -Wpedantic`, liệt kê nguồn tường minh và không đưa `main()` của kiểm thử hoặc code mẫu vào ứng dụng.
+
+Menu 1–6 quản lý tài liệu, độc giả, nhân viên, thủ thư trưởng, mượn–trả và vi phạm trên cùng một `QuanLyThuVien`. Menu 7 gọi các hàm tìm kiếm và sắp xếp đã có. Nhập `0` để quay lại từ menu con, `11` để thoát ứng dụng. Nhập mỗi thông tin trên một dòng; ngày theo `dd/mm/yyyy`.
+
+Mục 8 (thống kê nâng cao/thực nghiệm) và 9–10 (đọc/ghi toàn hệ thống) được đánh dấu **chưa triển khai**. Dữ liệu hiện chỉ ở bộ nhớ và mất khi thoát; chương trình không tự đọc hay lưu dữ liệu. Không dùng phiên bản này để lưu công việc thực tế.
+
+Khi thêm mới tài liệu, số còn phải bằng tổng số lượng. Khi thêm mới độc giả, số đang mượn phải bằng 0; sau đó lập phiếu để cập nhật các số này. Sửa hồ sơ phải giữ mã định danh và số đang mượn; sửa tài liệu phải giữ số lượng đang mượn. Dữ liệu nhập sai bị từ chối, hồ sơ cũ được giữ nguyên.
+
+Thêm thủ thư trưởng đồng thời đăng ký vai trò độc giả giảng viên từ chính thông tin đã nhập. Nếu độc giả đã có, chỉ liên kết khi toàn bộ thông tin giảng viên trùng khớp. Hai vai trò được đồng bộ sau mượn/trả và sửa từ menu thủ thư trưởng. Hồ sơ liên kết được sửa ở menu thủ thư trưởng. Xóa vai trò thủ thư trưởng giữ lại độc giả và lịch sử; muốn xóa tiếp độc giả, dùng menu độc giả khi không còn tài liệu đang mượn.
+
+### Liên kết nhân sự và chuyển vai trò
+
+- Mã người xác định một người. Cùng mã người ở nhiều vai trò phải khớp họ tên, ngày sinh, email và điện thoại. Thêm hồ sơ có thông tin mâu thuẫn bị từ chối. Sửa nhân thân của một hồ sơ hợp lệ đồng bộ phần `Nguoi` sang các vai trò liên kết, giữ nguyên mã và số đang mượn.
+- Một mã nhân viên chỉ thuộc danh sách nhân viên thường hoặc danh sách thủ thư trưởng. Không lưu bản sao nhân viên thường cho thủ thư trưởng. Menu nhân viên chỉ hiển thị nhân viên thường; xem thủ thư trưởng ở menu 4.
+- Menu **3 → 9** chuyển nhân viên thành thủ thư trưởng. Chọn mã nhân viên, nhập đầy đủ hồ sơ trưởng; giữ nguyên mã người, mã nhân viên, nhân thân, ca/chức vụ/lương/hệ số hiện tại. Bổ sung thông tin giảng viên và quản lý. Nếu đã có độc giả giảng viên, phải nhập đúng thông tin và số đang mượn; nếu chưa có, đăng ký độc giả mới với số đang mượn bằng 0. Không tự đổi loại độc giả sinh viên thành giảng viên.
+- Menu **4 → 11** chuyển thủ thư trưởng về nhân viên thường. Giữ nguyên nhân thân và thông tin nhân viên, giữ độc giả giảng viên, phiếu, tồn kho và vi phạm. Phần thông tin quản lý riêng của vai trò trưởng không nằm trong hồ sơ nhân viên thường; muốn chuyển lên trưởng lại, nhập lại phần này. Trường chức vụ là mô tả hồ sơ; quyền duyệt phụ thuộc đối tượng còn thuộc danh sách thủ thư trưởng, không phụ thuộc dòng chữ chức vụ.
+- Chuyển vai trò là thao tác riêng, không tự diễn ra khi thêm trùng mã. Các điều kiện được kiểm tra trước; thao tác trả về thất bại không làm thay đổi các danh sách. Các con trỏ lấy từ danh sách nhân sự cần được tìm lại sau thao tác chuyển vai trò vì danh sách có thể cấp phát lại.
+- Bỏ vai trò trưởng không xóa lịch sử người duyệt; người đã về nhân viên không được duyệt vi phạm mới. Mã đã xuất hiện trong lịch sử duyệt không được cấp lại bằng chức năng thêm mới sau khi xóa hồ sơ nhân sự. Dùng chuyển vai trò để giữ mã của người đang có hồ sơ.
+- Menu **4 → 8** xóa hồ sơ nhân sự trưởng, khác với chuyển về nhân viên. Xóa nhân sự không xóa dây chuyền độc giả, phiếu hay vi phạm. Các thao tác ghi dữ liệu của ứng dụng phải đi qua `QuanLyThuVien`; các lớp quản lý riêng vẫn được giữ để kiểm thử từng module.
+
+Trả trễ tự ghi vi phạm với mã `VP_<mã phiếu>`. Chức năng ghi nhận thủ công từ phiếu đã trả vẫn kiểm tra trùng; không tạo một vi phạm thứ hai. Duyệt vi phạm yêu cầu mã thủ thư trưởng tồn tại. Thanh toán và duyệt trùng bị từ chối.
+
+Chạy kiểm thử riêng:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -KiemThu
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\kiemThuMenu.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\chayKiemThuDocGia.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\chayKiemThuMuonTra.ps1
+```
+
+`-KiemThu` biên dịch `tests/kiemThuTichHop.cpp` thành executable riêng. `kiemThuMenu.ps1` biên dịch lại ứng dụng rồi nhập dữ liệu qua stdin của chính ứng dụng, kiểm tra đầu ra, mã thoát và trường hợp hết đầu vào. Mỗi lần chạy lưu `nhap.txt`, `xuat.txt`, `loi.txt` và kết quả trong `build/menu-kiemthu-<mã riêng>/`; không ghi vào dữ liệu mẫu hoặc thư mục cá nhân.
+
 Đây là một chương trình quản lý thư viện chung. Nhánh `tv2-docgia` phát triển phần độc giả và nhân sự, giữ các giao diện để tích hợp với tài liệu, mượn trả và vi phạm.
 
 ## Phạm vi phần 2

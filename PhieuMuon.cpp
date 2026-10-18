@@ -177,7 +177,9 @@ std::ostream& operator<<(std::ostream& luong, const PhieuMuon& phieu){
     luong << "Ngay tra: " << phieu.ngayTra << '\n';
     luong << "Trang thai: " << phieu.trangThai << '\n';
     luong << "So luong: " << phieu.soLuongMuon << '\n';
-    luong << "Tien phat: " << phieu.tienPhat << '\n';
+    luong << "Tien phat: ";
+    xuatTien(luong, phieu.tienPhat);
+    luong << '\n';
     return luong;
 }
 

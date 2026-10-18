@@ -282,6 +282,61 @@ void kiemThuTichHop(){
     kiemTra(!pm.traTaiLieu("P1", "04/01/2024", dg, tl, vp), "Khong tra hai lan");
 }
 
+//=====kiem tra hien thi luong va khoi phuc dinh dang=====
+void kiemThuDinhDangLuong(){
+    std::ios::fmtflags dinhDangBanDau = std::cout.flags();
+    std::streamsize doChinhXacBanDau = std::cout.precision();
+    NhanVienThuThu nv = taoNhanVien("NV_DD", 3);
+    ThuThuTruong tt = taoTruong("TT_DD");
+    const NhanVienThuThu* ds[] = {&nv, &tt};
+    for(int cheDo = 0; cheDo < 3; cheDo++){
+        std::cout.unsetf(std::ios::floatfield);
+        std::cout.precision(6);
+        if(cheDo == 1){
+            std::cout.setf(std::ios::scientific, std::ios::floatfield);
+            std::cout.precision(3);
+        }
+        else if(cheDo == 2){
+            std::cout.setf(std::ios::fixed, std::ios::floatfield);
+            std::cout.precision(2);
+        }
+        for(int i = 0; i < 2; i++){
+            std::ios::fmtflags dinhDangCu = std::cout.flags();
+            std::streamsize doChinhXacCu = std::cout.precision();
+            std::ostringstream heSo;
+            heSo.flags(dinhDangCu);
+            heSo.precision(doChinhXacCu);
+            heSo << "He so luong: " << ds[i]->layHeSoLuong() << '\n';
+            std::ostringstream xuat;
+            std::streambuf* luongCu = std::cout.rdbuf(xuat.rdbuf());
+            ds[i]->xuat();
+            std::cout.rdbuf(luongCu);
+            kiemTra(xuat.str().find("Luong co ban: 5000000\n") != std::string::npos,
+                     "Luong nhan vien va truong khong dung ky hieu khoa hoc");
+            kiemTra(xuat.str().find(heSo.str()) != std::string::npos,
+                     "Dinh dang luong khong anh huong he so");
+            kiemTra(std::cout.flags() == dinhDangCu, "Khoi phuc flags cua cout");
+            kiemTra(std::cout.precision() == doChinhXacCu, "Khoi phuc precision cua cout");
+        }
+    }
+    std::cout.flags(dinhDangBanDau);
+    std::cout.precision(doChinhXacBanDau);
+
+    NhanVienThuThu le = taoNhanVien("NV_LE", 3.25, 5000000.25);
+    std::string truoc = noiDung(le);
+    std::ostringstream xuat;
+    std::streambuf* luongCu = std::cout.rdbuf(xuat.rdbuf());
+    le.xuat();
+    std::cout.rdbuf(luongCu);
+    kiemTra(xuat.str().find("Luong co ban: 5000000\n") != std::string::npos,
+             "Luong le chi lam tron khi hien thi");
+    kiemTra(xuat.str().find("He so luong: 3.25\n") != std::string::npos,
+             "Khong lam tron he so luong le");
+    kiemTra(le.tinhLuong() == 16250000.8125, "Khong thay doi gia tri va cong thuc luong");
+    kiemTra(noiDung(le) == truoc, "Khong thay doi du lieu ghi tep");
+    kiemTra(tt.tinhThuNhap() == 14000000, "Khong thay doi thu nhap thu thu truong");
+}
+
 int main(int argc, char* argv[]){
     if(argc != 2 || !std::filesystem::is_directory(argv[1]) || !std::filesystem::is_empty(argv[1])){
         std::cerr << "Can thu muc kiem thu rieng, rong va da ton tai\n";
@@ -294,6 +349,7 @@ int main(int argc, char* argv[]){
     kiemThuDocGia(goc / "docgia");
     kiemThuNhanSu(goc / "nhansu");
     kiemThuTichHop();
+    kiemThuDinhDangLuong();
     std::cout << "Dat: " << soKiemTra - soLoi << ", khong dat: " << soLoi << '\n';
     return ketQuaKiemThu();
 }

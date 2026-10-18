@@ -21,5 +21,6 @@ public:
     virtual bool hopLe() const;
     std::string layMaNguoi() const;
     std::string layHoTen() const;
+    bool cungThongTinCaNhan(const Nguoi& khac) const;
 };
 #endif

@@ -77,7 +77,9 @@ void NhatKyViPham::xuat() const{
     std::cout << "Ma doc gia: " << maDocGia << '\n';
     std::cout << "Loai: " << loaiViPham << '\n';
     std::cout << "So ngay tre: " << soNgayTre << '\n';
-    std::cout << "Tien phat: " << soTienPhat << '\n';
+    std::cout << "Tien phat: ";
+    xuatTien(std::cout, soTienPhat);
+    std::cout << '\n';
     if(daThanhToan){
         std::cout << "Da thanh toan\n";
     }

@@ -12,6 +12,7 @@ int doiNgay(const std::string& ngay);
 std::string ngayHienTai();
 bool nhapChuoi(std::istream& luong, const std::string& loiNhac, std::string& chuoi);
 bool docChuoiCu(std::istream& luong, std::string& chuoi);
+void xuatTien(std::ostream& luong, double tien);
 
 //=====ham nhap so=====
 template<class T>

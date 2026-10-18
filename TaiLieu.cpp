@@ -98,7 +98,9 @@ void TaiLieu::xuatChung() const{
     std::cout << "Nha xuat ban: " << nhaXuatBan << '\n';
     std::cout << "Nam xuat ban: " << namXuatBan << '\n';
     std::cout << "So luong con/tong: " << soLuongCon << '/' << soLuongTong << '\n';
-    std::cout << "Gia tri: " << std::setprecision(17) << giaTri << '\n';
+    std::cout << "Gia tri: ";
+    xuatTien(std::cout, giaTri);
+    std::cout << '\n';
 }
 
 //=====ham ghi tep=====

@@ -3,6 +3,15 @@
 #include <ctime>
 #include <iomanip>
 
+//=====ham xuat tien=====
+void xuatTien(std::ostream& luong, double tien){
+    std::ios::fmtflags dinhDangCu = luong.flags();
+    std::streamsize doChinhXacCu = luong.precision();
+    luong << std::fixed << std::setprecision(0) << tien;
+    luong.flags(dinhDangCu);
+    luong.precision(doChinhXacCu);
+}
+
 //=====ham kiem tra chuoi=====
 bool chuoiHopLe(const std::string& chuoi){
     bool coChu = false;

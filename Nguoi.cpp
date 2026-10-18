@@ -92,3 +92,10 @@ std::string Nguoi::layMaNguoi() const{
 std::string Nguoi::layHoTen() const{
     return hoTen;
 }
+
+//=====ham doi chieu nhan than=====
+bool Nguoi::cungThongTinCaNhan(const Nguoi& khac) const{
+    return maNguoi == khac.maNguoi && hoTen == khac.hoTen
+        && ngaySinh == khac.ngaySinh && email == khac.email
+        && soDienThoai == khac.soDienThoai;
+}
