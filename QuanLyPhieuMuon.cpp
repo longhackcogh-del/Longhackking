@@ -3,6 +3,7 @@
 #include "QuanLyTaiLieu.h"
 #include "QuanLyViPham.h"
 #include "Tep.h"
+#include "TepMuonTra.h"
 
 //=====ham tim kiem=====
 PhieuMuon* QuanLyPhieuMuon::timTheoMa(const std::string& ma){
@@ -199,21 +200,33 @@ void QuanLyPhieuMuon::sapXepTheoMa(){
 //=====ham doc ghi tep=====
 bool QuanLyPhieuMuon::luu(const std::string& thuMuc, std::string& loi) const{
     loi.clear();
-    std::ofstream tep(thuMuc + "/PhieuMuon.txt");
-    if(!tep){
-        loi = "Khong mo tep PhieuMuon";
+    if(ds.laySoLuong() > 1000000){
+        loi = "So ban ghi vuot gioi han dinh dang tep";
         return false;
     }
-    ghiDauTep(tep, ds.laySoLuong());
+    // Kiem tra het danh sach truoc khi tao tep.
     for(int i = 0; i < ds.laySoLuong(); i++){
-        ds[i].ghi(tep);
+        if(!ds[i].hopLe()){
+            loi = "Khong luu ban ghi khong hop le";
+            return false;
+        }
+        for(int j = 0; j < i; j++){
+            if(ds[i].layMa() == ds[j].layMa()){
+                loi = "Khong luu ban ghi trung ma hoac trung su kien";
+                return false;
+            }
+        }
     }
-    tep.close();
-    if(!tep){
-        loi = "Loi ghi tep PhieuMuon";
+    std::ostringstream noiDung;
+    ghiDauTep(noiDung, ds.laySoLuong());
+    for(int i = 0; i < ds.laySoLuong(); i++){
+        ds[i].ghi(noiDung);
+    }
+    if(!noiDung){
+        loi = "Khong tao duoc noi dung tep";
         return false;
     }
-    return true;
+    return ghiTepMuonTra(thuMuc + "/PhieuMuon.txt", noiDung.str(), loi);
 }
 
 bool QuanLyPhieuMuon::doc(const std::string& thuMuc, std::string& loi){

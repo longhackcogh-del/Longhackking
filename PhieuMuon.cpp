@@ -42,7 +42,14 @@ bool PhieuMuon::hopLe() const{
         return ngayTra == "-" && tienPhat == 0;
     }
     if(trangThai == "Da tra"){
-        return ngayHopLe(ngayTra) && doiNgay(ngayTra) >= doiNgay(ngayMuon);
+        if(!ngayHopLe(ngayTra) || doiNgay(ngayTra) < doiNgay(ngayMuon)){
+            return false;
+        }
+        // Tra dung han khong phat qua han.
+        if(doiNgay(ngayTra) <= doiNgay(hanTra) && tienPhat != 0){
+            return false;
+        }
+        return true;
     }
     return false;
 }
@@ -103,18 +110,28 @@ int PhieuMuon::tinhSoNgayTre(const std::string& ngay) const{
 }
 
 double PhieuMuon::tinhTienPhat(const TaiLieu& taiLieu, const std::string& ngay) const{
-    if(taiLieu.layMa() != maTaiLieu || tinhSoNgayTre(ngay) < 0){
+    int soNgayTre = tinhSoNgayTre(ngay);
+    if(!taiLieu.hopLe() || taiLieu.layMa() != maTaiLieu || soNgayTre < 0){
         return -1;
     }
-    return taiLieu.tinhTienPhat(tinhSoNgayTre(ngay)) * soLuongMuon;
+    double phat = taiLieu.tinhTienPhat(soNgayTre) * soLuongMuon;
+    if(!std::isfinite(phat) || phat < 0 || (soNgayTre == 0 && phat != 0)){
+        return -1;
+    }
+    return phat;
 }
 
 //=====ham tra tai lieu=====
 bool PhieuMuon::traTaiLieu(DocGia& docGia, TaiLieu& taiLieu, const std::string& ngay){
-    if(!hopLe() || !dangMuon() || tinhSoNgayTre(ngay) < 0){
+    int soNgayTre = tinhSoNgayTre(ngay);
+    if(!hopLe() || !dangMuon() || soNgayTre < 0){
         return false;
     }
     if(docGia.layMa() != maDocGia || taiLieu.layMa() != maTaiLieu){
+        return false;
+    }
+    // Kiem tra truoc khi thay doi kho va so dang muon.
+    if(!docGia.hopLe() || !taiLieu.hopLe()){
         return false;
     }
     if(docGia.laySoDangMuon() < soLuongMuon
@@ -122,7 +139,7 @@ bool PhieuMuon::traTaiLieu(DocGia& docGia, TaiLieu& taiLieu, const std::string& 
         return false;
     }
     double phat = tinhTienPhat(taiLieu, ngay);
-    if(!std::isfinite(phat) || phat < 0){
+    if(!std::isfinite(phat) || phat < 0 || (soNgayTre == 0 && phat != 0)){
         return false;
     }
     taiLieu.tangSoLuong(soLuongMuon);

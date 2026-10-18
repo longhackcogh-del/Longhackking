@@ -97,7 +97,7 @@ bool NhatKyViPham::thanhToanPhat(){
 }
 
 bool NhatKyViPham::duyet(const std::string& maThuThu){
-    if(!chuoiHopLe(maThuThu) || maThuThu == "-" || maNguoiDuyet != "-"){
+    if(!hopLe() || !chuoiHopLe(maThuThu) || maThuThu == "-" || maNguoiDuyet != "-"){
         return false;
     }
     maNguoiDuyet = maThuThu;
@@ -112,7 +112,12 @@ void NhatKyViPham::ghi(std::ostream& tep) const{
     tep << loaiViPham << '\n';
     tep << soNgayTre << '\n';
     tep << std::setprecision(17) << soTienPhat << '\n';
-    tep << daThanhToan << '\n';
+    if(daThanhToan){
+        tep << 1 << '\n';
+    }
+    else{
+        tep << 0 << '\n';
+    }
     tep << maNguoiDuyet << '\n';
 }
 
