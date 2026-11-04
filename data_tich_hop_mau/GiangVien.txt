@@ -1,0 +1,26 @@
+THUVIEN_2
+2
+N_GV01
+Le Van Binh
+01/01/1980
+binh@dh.edu
+0901234568
+DG_GV01
+0
+1
+GV01
+CNTT
+Tien si
+15
+N_TT01
+Tran Thi Thu
+01/01/1975
+thu@dh.edu
+0901234569
+DG_TT01
+0
+1
+GV_TT01
+CNTT
+Tien si
+20

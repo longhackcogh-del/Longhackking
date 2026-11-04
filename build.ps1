@@ -1,7 +1,7 @@
-param([switch]$KiemThu)
+param([switch]$KiemThu, [switch]$KiemThuThongKe, [string]$ThuMucBuild = 'build/tich-hop')
 $ErrorActionPreference = 'Stop'
 $gocDuAn = $PSScriptRoot
-$thuMucBuild = Join-Path $gocDuAn 'build/tich-hop'
+$thuMucBuild = Join-Path $gocDuAn $ThuMucBuild
 New-Item -ItemType Directory -Path $thuMucBuild -Force | Out-Null
 Get-Command g++ -ErrorAction Stop | Out-Null
 $tenNguon = @(
@@ -10,9 +10,16 @@ $tenNguon = @(
     'QuanLyNhanVien.cpp', 'QuanLyThuThuTruong.cpp', 'NhapXuat.cpp',
     'TaiLieu.cpp', 'Sach.cpp', 'TapChi.cpp', 'Bao.cpp', 'QuanLyTaiLieu.cpp',
     'PhieuMuon.cpp', 'QuanLyPhieuMuon.cpp', 'NhatKyViPham.cpp',
-    'QuanLyViPham.cpp', 'QuanLyThuVien.cpp'
+    'QuanLyViPham.cpp', 'QuanLyThuVien.cpp', 'TepHeThong.cpp', 'ThongKe.cpp'
 )
-if($KiemThu){
+if($KiemThu -and $KiemThuThongKe){
+    throw 'Chi chon mot bo kiem thu moi lan.'
+}
+if($KiemThuThongKe){
+    $tenNguon += 'tests/kiemThuThongKe.cpp'
+    $tepChay = Join-Path $thuMucBuild 'kiemThuThongKe.exe'
+}
+elseif($KiemThu){
     $tenNguon += 'tests/kiemThuTichHop.cpp'
     $tepChay = Join-Path $thuMucBuild 'kiemThuTichHop.exe'
 }
@@ -37,7 +44,7 @@ if($maBienDich -ne 0){
     exit $maBienDich
 }
 Write-Host "Da bien dich: $tepChay"
-if($KiemThu){
+if($KiemThu -or $KiemThuThongKe){
     & $tepChay
     exit $LASTEXITCODE
 }

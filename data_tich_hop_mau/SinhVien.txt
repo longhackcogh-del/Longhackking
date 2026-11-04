@@ -1,0 +1,14 @@
+THUVIEN_2
+1
+N_SV01
+Nguyen Van An
+29/02/2004
+an@dh.edu
+0901234567
+DG_SV01
+1
+1
+SV01
+CT1
+CNTT
+Phan mem

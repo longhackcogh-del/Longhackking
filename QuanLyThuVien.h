@@ -35,6 +35,12 @@ public:
     QuanLyThuThuTruong& layThuThuTruong();
     QuanLyPhieuMuon& layPhieuMuon();
     QuanLyViPham& layViPham();
+    const QuanLyTaiLieu& layTaiLieu() const;
+    const QuanLyDocGia& layDocGia() const;
+    const QuanLyNhanVien& layNhanVien() const;
+    const QuanLyThuThuTruong& layThuThuTruong() const;
+    const QuanLyPhieuMuon& layPhieuMuon() const;
+    const QuanLyViPham& layViPham() const;
     // Chi nhan quyen so huu con tro khi thanh cong.
     bool themTaiLieu(TaiLieu* moi);
     bool themDocGia(DocGia* moi, int viTri);
@@ -52,5 +58,9 @@ public:
     bool traTaiLieu(const std::string& ma, const std::string& ngay);
     bool ghiViPham(const std::string& maPhieu);
     bool duyetViPham(const std::string& ma, const std::string& maThuThu);
+    bool kiemTraNhatQuan(std::string& loi) const;
+    bool docToanBo(const std::string& thuMuc, std::string& loi);
+    bool luuToanBo(const std::string& thuMuc, std::string& loi) const;
+    void doiDuLieu(QuanLyThuVien& khac);
 };
 #endif

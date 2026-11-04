@@ -1,0 +1,18 @@
+THUVIEN_2
+2
+VP_P02
+P02
+DG_GV01
+Qua han
+2
+6000
+1
+NV_TT01
+VP_P03
+P03
+DG_TT01
+Qua han
+3
+3000
+0
+-

@@ -1,0 +1,22 @@
+THUVIEN_2
+1
+N_TT01
+Tran Thi Thu
+01/01/1975
+thu@dh.edu
+0901234569
+DG_TT01
+0
+1
+GV_TT01
+CNTT
+Tien si
+20
+NV_TT01
+Sang
+Truong thu thu
+5000000
+2
+Tang 1
+12
+1

@@ -1,10 +1,11 @@
 $ErrorActionPreference = 'Stop'
 $gocDuAn = Split-Path -Parent $PSScriptRoot
-& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $gocDuAn 'build.ps1')
+$buildMenu = 'build/menu-app-' + [Guid]::NewGuid().ToString('N')
+& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $gocDuAn 'build.ps1') -ThuMucBuild $buildMenu
 if($LASTEXITCODE -ne 0){
     exit $LASTEXITCODE
 }
-$tepChay = Join-Path $gocDuAn 'build/tich-hop/thuVien.exe'
+$tepChay = Join-Path $gocDuAn ($buildMenu + '/thuVien.exe')
 $thuMucChay = Join-Path $gocDuAn ('build/menu-kiemthu-' + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $thuMucChay | Out-Null
 $script:soKiemTra = 0
@@ -81,12 +82,12 @@ $dong = @('abc', '99')
 foreach($i in 1..7){
     $dong += @("$i", 'abc', '99', '0')
 }
-$dong += @('8', '9', '10', '11')
+$dong += @('8', '0', '9', 'khong-ton-tai', '10', 'khong-ton-tai', '11')
 $xuat = ChayCa 'dieu-huong' $dong
 KiemTra ($xuat.Contains('HE THONG QUAN LY THU VIEN')) 'tieu de menu chinh'
 KiemTra ([regex]::Matches($xuat, 'Nhap sai dinh dang so').Count -eq 8) 'nhap chu o menu chinh va bay menu con'
 KiemTra ([regex]::Matches($xuat, 'Lua chon khong hop le').Count -eq 8) 'lua chon ngoai pham vi'
-KiemTra ([regex]::Matches($xuat, 'Chua trien khai trong giai doan 1').Count -eq 3) 'ba muc chua trien khai duoc bao ro'
+KiemTra ([regex]::Matches($xuat, 'Chua trien khai trong giai doan 1').Count -eq 0) 'khong con menu chua trien khai'
 KiemTra ($xuat.Contains('Thoat chuong trinh. Khong tu dong luu du lieu.')) 'thoat bang 11'
 foreach($i in 0..7){
     if($i -eq 0){
@@ -248,6 +249,93 @@ $xuat = ChayCa 'trung-ma-nhan-su-cheo' $dong
 KiemTra ([regex]::Matches($xuat, 'Thao tac that bai').Count -eq 2) 'nhan su : tu choi trung ma nhan vien va trung nguoi cheo danh sach'
 KiemTra ($xuat.Contains('Danh sach rong')) 'nhan su : khong de lai nhan vien thuong trung voi truong'
 KiemTra ($xuat.Contains('Ho ten: Tran Thi Thu')) 'nhan su : ho so truong goc van giu nguyen'
+
+#=====doc/ghi ca he thong qua chinh executable ung dung=====
+$mauTichHop = Join-Path $gocDuAn 'data_tich_hop_mau'
+$dichLuu = Join-Path $thuMucChay 'bo du lieu luu'
+New-Item -ItemType Directory -Path $dichLuu | Out-Null
+$dong = @('9', $mauTichHop, '1', '1', '3', 'S01', '0', '2', '3', 'DG_SV01', '0',
+          '6', '9', 'VP_P02', '0', '10', $dichLuu, '1', '11')
+$xuat = ChayCa 'doc-va-luu-chin-tep' $dong
+KiemTra ($xuat.Contains('Da doc du chin tep')) 'doc ca bo qua menu 9'
+KiemTra ($xuat.Contains('So luong con/tong: 2/3')) 'doc kho tu tep'
+KiemTra ($xuat -match 'Ma doc gia: DG_SV01\r?\nSo dang muon: 1') 'doc so muon tu tep'
+KiemTra ($xuat.Contains('Nguoi duyet: NV_TT01')) 'doc nguyen nguoi duyet'
+KiemTra ($xuat.Contains('Da luu du chin tep')) 'luu ca bo qua menu 10'
+$tenTep = @('Sach.txt', 'TapChi.txt', 'Bao.txt', 'SinhVien.txt', 'GiangVien.txt',
+            'NhanVienThuThu.txt', 'ThuThuTruong.txt', 'PhieuMuon.txt', 'NhatKyViPham.txt')
+foreach($ten in $tenTep){
+    # Git co the checkout LF hoac CRLF; so sanh day du cac dong du lieu.
+    $noiDungLuu = (Get-Content -LiteralPath (Join-Path $dichLuu $ten) -Raw).Replace("`r`n", "`n")
+    $noiDungMau = (Get-Content -LiteralPath (Join-Path $mauTichHop $ten) -Raw).Replace("`r`n", "`n")
+    KiemTra ($noiDungLuu -eq $noiDungMau) "menu luu dung tung tep $ten"
+}
+$dong = @('9', $dichLuu, '1', '5', '2', 'P01', '05/01/2026', '0',
+          '1', '3', 'S01', '0', '2', '3', 'DG_SV01', '0',
+          '6', '9', 'VP_P01', '8', 'VP_P01', 'NV_TT01', '5', 'VP_P01', '0',
+          '10', $dichLuu, '1', '11')
+$xuat = ChayCa 'mo-lai-roi-tra-duyet-thanh-toan' $dong
+KiemTra ($xuat.Contains('So luong con/tong: 3/3')) 'mo lai roi tra cap nhat kho'
+KiemTra ($xuat -match 'Ma doc gia: DG_SV01\r?\nSo dang muon: 0') 'mo lai roi tra cap nhat doc gia'
+KiemTra ($xuat.Contains('Tien phat: 4000')) 'tinh phat sau mo lai'
+KiemTra (!($xuat.Contains('Thao tac that bai'))) 'duyet va thanh toan sau mo lai'
+KiemTra (Test-Path -LiteralPath (Join-Path $dichLuu '.sao-luu-thuvien-2/cu/PhieuMuon.txt')) 'menu luu de giu ban sao cu'
+
+$truocHuy = @(foreach($ten in $tenTep){ (Get-FileHash -LiteralPath (Join-Path $dichLuu $ten)).Hash })
+$dong = @('9', $dichLuu, '1', '9', $mauTichHop, '0',
+          '9', 'khong-ton-tai', '2', '3', 'DG_SV01', '0', '10', $dichLuu, '0', '11')
+$xuat = ChayCa 'huy-doc-huy-luu-va-doc-loi' $dong
+KiemTra ($xuat.Contains('Da huy doc')) 'huy doc sau khi kiem tra du lieu'
+KiemTra ($xuat.Contains('Doc that bai')) 'doc loi duoc bao ro'
+KiemTra ($xuat.Contains('Da huy luu')) 'huy luu khong tao giao dich'
+KiemTra ($xuat -match 'Ma doc gia: DG_SV01\r?\nSo dang muon: 0') 'huy va doc loi giu du lieu dang dung'
+for($i = 0; $i -lt $tenTep.Count; $i++){
+    KiemTra ((Get-FileHash -LiteralPath (Join-Path $dichLuu $tenTep[$i])).Hash -eq $truocHuy[$i]) "huy giu tep $($tenTep[$i])"
+}
+$dangDo = Join-Path $thuMucChay 'dang do'
+New-Item -ItemType Directory -Path (Join-Path $dangDo '.giao-dich-thuvien') | Out-Null
+$xuat = ChayCa 'chan-giao-dich-dang-do' @('9', $dangDo, '10', $dangDo, '11')
+KiemTra ([regex]::Matches($xuat, 'Phat hien giao dich luu dang do').Count -eq 2) 'chan ca menu 9 va 10 khi dang do'
+KiemTra ($xuat.Contains('nhat-ky.txt')) 'huong dan phuc hoi du lieu'
+foreach($i in 9..10){
+    $xuat = ChayCa "EOF-doc-luu-$i" @("$i")
+    KiemTra ($xuat.Contains('Ket thuc dau vao')) "EOF menu $i ket thuc an toan"
+}
+
+
+$xuat = ChayCa 'thong-ke-rong' @('8','1','2','3','4','5','0','11')
+KiemTra ($xuat.Contains('Danh sach doc gia rong.')) 'thong ke doc gia rong'
+KiemTra ($xuat.Contains('Chua co luot muon.')) 'thong ke lich su rong'
+$xuat = ChayCa 'thong-ke-mau' @('9',$mauTichHop,'1','8','1','2','3','4','5','6','0','11')
+KiemTra ($xuat.Contains('Tong so tai lieu doc gia dang muon: 1')) 'tong qua operator cong'
+KiemTra ($xuat.Contains('So muon it nhat: 0')) 'tim min trong thong ke'
+KiemTra ($xuat.Contains('So muon nhieu nhat: 1')) 'tim max trong thong ke'
+KiemTra ($xuat.Contains('So ban muon nhieu nhat (gom lich su): 1')) 'thong ke cac tai lieu dong hang'
+KiemTra ($xuat.Contains('Da thu: 6000') -and $xuat.Contains('Chua thu: 3000')) 'thong ke tien phat'
+KiemTra ($xuat.Contains('Kiem tra ket qua thuat toan: DAT')) 'thuc nghiem kiem tra ket qua'
+foreach($n in @(100,500,1000,2000)){
+    KiemTra ($xuat -match "(?m)^$n,") "thuc nghiem kich thuoc $n"
+}
+
+#=====doc va luu tu sau menu quan ly dung cung mot he thong=====
+$luuTuMenu = Join-Path $thuMucChay 'luu-tu-menu-con'
+New-Item -ItemType Directory -Path $luuTuMenu | Out-Null
+$dong = @('9', $mauTichHop, '1')
+foreach($nhom in 1..6){
+    $luu = 10
+    $doc = 11
+    if($nhom -eq 4){
+        $luu = 12
+        $doc = 13
+    }
+    $dong += @("$nhom", "$luu", $luuTuMenu, '1', "$doc", $luuTuMenu, '1', '0')
+}
+$dong += @('2','3','DG_SV01','0','11')
+$xuat = ChayCa 'doc-luu-tu-sau-menu-con' $dong
+KiemTra ([regex]::Matches($xuat, 'Da luu du chin tep').Count -eq 6) 'sau menu con luu du ca bo'
+KiemTra ([regex]::Matches($xuat, 'Da doc du chin tep').Count -eq 7) 'sau menu con doc dung ca bo'
+KiemTra ($xuat -match 'Ma doc gia: DG_SV01\r?\nSo dang muon: 1') 'doc luu tu menu con giu lien ket muon'
+KiemTra (!($xuat.Contains('that bai'))) 'doc luu tu menu con khong loi'
 
 $ketQua = "Kiem tra menu: $script:soKiemTra, loi: $script:soLoi"
 Write-Host $ketQua

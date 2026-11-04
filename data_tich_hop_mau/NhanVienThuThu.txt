@@ -1,0 +1,12 @@
+THUVIEN_2
+1
+N_NV01
+Pham Thi Hoa
+01/01/1990
+hoa@dh.edu
+0901234560
+NV01
+Chieu
+Thu thu
+4000000
+1.5

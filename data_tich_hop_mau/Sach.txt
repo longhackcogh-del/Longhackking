@@ -1,0 +1,13 @@
+THUVIEN_2
+1
+S01
+Lap trinh C++
+NXB DH
+2022
+3
+2
+120000
+Nguyen Van A
+Tin hoc
+ISBN01
+100
