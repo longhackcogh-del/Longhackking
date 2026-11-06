@@ -1,6 +1,7 @@
 #include "Sach.h"
 #include "NhapXuat.h"
 #include "ThuatToan.h"
+using namespace std;
 
 //=====ham khoi tao=====
 Sach::Sach(){
@@ -10,8 +11,8 @@ Sach::Sach(){
     soTrang = 0;
 }
 
-Sach::Sach(std::string ma, std::string ten, std::string nxb,
-              int nam, int tong, int con, double gia, std::string tacGia, std::string theLoai, std::string ISBN, int soTrang)
+Sach::Sach(string ma, string ten, string nxb,
+              int nam, int tong, int con, double gia, string tacGia, string theLoai, string ISBN, int soTrang)
     : TaiLieu(ma, ten, nxb, nam, tong, con, gia){
     this->tacGia = tacGia;
     this->theLoai = theLoai;
@@ -27,7 +28,7 @@ bool Sach::hopLe() const{
 }
 
 //=====ham nhap=====
-bool Sach::nhap(std::istream& luong){
+bool Sach::nhap(istream& luong){
     Sach tam;
     if(!tam.TaiLieu::nhap(luong)){
         return false;
@@ -54,10 +55,10 @@ bool Sach::nhap(std::istream& luong){
 //=====ham xuat=====
 void Sach::xuat() const{
     xuatChung();
-    std::cout << "tac gia: " << tacGia << '\n';
-    std::cout << "the loai: " << theLoai << '\n';
-    std::cout << "ISBN: " << ISBN << '\n';
-    std::cout << "so trang: " << soTrang << '\n';
+    cout << "tac gia: " << tacGia << '\n';
+    cout << "the loai: " << theLoai << '\n';
+    cout << "ISBN: " << ISBN << '\n';
+    cout << "so trang: " << soTrang << '\n';
 }
 
 //=====ham tinh tien phat=====
@@ -67,12 +68,12 @@ double Sach::tinhTienPhat(int soNgayTre) const{
     return tienPhat;
 }
 
-std::string Sach::layLoai() const{
+string Sach::layLoai() const{
     return "Sach";
 }
 
 //=====ham ghi tep=====
-void Sach::ghi(std::ostream& tep) const{
+void Sach::ghi(ostream& tep) const{
     ghiChung(tep);
     tep << tacGia << '\n';
     tep << theLoai << '\n';

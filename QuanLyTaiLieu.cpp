@@ -8,6 +8,7 @@
 #include <sstream>
 #include "Tep.h"
 #include "QuanLyPhieuMuon.h"
+using namespace std;
 
 QuanLyTaiLieu::QuanLyTaiLieu(){
     kiemTraPhieuMuon = nullptr;
@@ -20,7 +21,7 @@ QuanLyTaiLieu::~QuanLyTaiLieu(){
     }
 }
 
-void QuanLyTaiLieu::ganKiemTraPhieuMuon(bool (*ham)(const std::string&)){
+void QuanLyTaiLieu::ganKiemTraPhieuMuon(bool (*ham)(const string&)){
     kiemTraPhieuMuon = ham;
 }
 
@@ -40,7 +41,7 @@ bool QuanLyTaiLieu::dangMuon(const TaiLieu& taiLieu) const{
     return false;
 }
 
-int QuanLyTaiLieu::timViTri(const std::string& ma) const{
+int QuanLyTaiLieu::timViTri(const string& ma) const{
     for (int i = 0; i < ds.laySoLuong(); i++){
         if (ds[i]->layMa() == ma){
             return i;
@@ -70,7 +71,7 @@ bool QuanLyTaiLieu::them(TaiLieu* taiLieu){
 }
 
 bool QuanLyTaiLieu::sua(
-    const std::string& ma,
+    const string& ma,
     TaiLieu* taiLieu
 ){
     int viTri = timViTri(ma);
@@ -105,7 +106,7 @@ bool QuanLyTaiLieu::sua(
     return true;
 }
 
-bool QuanLyTaiLieu::xoa(const std::string& ma){
+bool QuanLyTaiLieu::xoa(const string& ma){
     int viTri = timViTri(ma);
     if (viTri < 0){
         return false;
@@ -121,7 +122,7 @@ bool QuanLyTaiLieu::xoa(const std::string& ma){
     return true;
 }
 
-TaiLieu* QuanLyTaiLieu::timTheoMa(const std::string& ma) const{
+TaiLieu* QuanLyTaiLieu::timTheoMa(const string& ma) const{
     int viTri = timViTri(ma);
     if (viTri < 0){
         return nullptr;
@@ -131,13 +132,13 @@ TaiLieu* QuanLyTaiLieu::timTheoMa(const std::string& ma) const{
 }
 
 int QuanLyTaiLieu::timTheoTen(
-    const std::string& ten,
-    std::ostream& luong
+    const string& ten,
+    ostream& luong
 ) const{
     int soKetQua = 0;
     for (int i = 0; i < ds.laySoLuong(); i++){
-        if (ds[i]->layTen().find(ten) != std::string::npos){
-            if(&luong == &std::cout){
+        if (ds[i]->layTen().find(ten) != string::npos){
+            if(&luong == &cout){
                 ds[i]->xuat();
             }
             else{
@@ -163,7 +164,7 @@ const TaiLieu* QuanLyTaiLieu::layTaiLieu(int viTri) const{
 
 void QuanLyTaiLieu::hienThi() const{
     if (ds.laySoLuong() == 0){
-        std::cout << "Danh sach rong\n";
+        cout << "Danh sach rong\n";
     }
 
     for (int i = 0; i < ds.laySoLuong(); i++){
@@ -225,8 +226,8 @@ void QuanLyTaiLieu::sapXepTheoGiaTri(){
     quickSort(0, ds.laySoLuong() - 1);
 }
 
-void QuanLyTaiLieu::thongKe(std::ostream& luong) const{
-    std::string loai[] = {"Sach", "TapChi", "Bao"};
+void QuanLyTaiLieu::thongKe(ostream& luong) const{
+    string loai[] = {"Sach", "TapChi", "Bao"};
 
     for (int k = 0; k < 3; k++){
         int soDau = 0;
@@ -255,7 +256,7 @@ void QuanLyTaiLieu::ganQuanLyPhieuMuon(const QuanLyPhieuMuon* quanLy){
 }
 
 //=====ham tim kiem nhi phan=====
-TaiLieu* QuanLyTaiLieu::timNhiPhan(const std::string& ma) const{
+TaiLieu* QuanLyTaiLieu::timNhiPhan(const string& ma) const{
     int n = ds.laySoLuong();
     TaiLieu** mang = new TaiLieu*[n];
     for(int i = 0; i < n; i++){
@@ -291,11 +292,11 @@ TaiLieu* QuanLyTaiLieu::timNhiPhan(const std::string& ma) const{
 }
 
 //=====ham luu tep=====
-bool QuanLyTaiLieu::luu(const std::string& thuMuc, std::string& loi) const{
+bool QuanLyTaiLieu::luu(const string& thuMuc, string& loi) const{
     loi.clear();
-    std::string loai[] = {"Sach", "TapChi", "Bao"};
+    string loai[] = {"Sach", "TapChi", "Bao"};
     for(int k = 0; k < 3; k++){
-        std::ofstream tep(thuMuc + "/" + loai[k] + ".txt");
+        ofstream tep(thuMuc + "/" + loai[k] + ".txt");
         if(!tep){
             loi = "Khong mo duoc tep " + loai[k];
             return false;
@@ -322,10 +323,10 @@ bool QuanLyTaiLieu::luu(const std::string& thuMuc, std::string& loi) const{
 }
 
 //=====ham chuyen mot dong tai lieu cu=====
-static bool chuyenDongCu(const std::string& dong, int loai, std::string& ketQua){
-    std::istringstream luong(dong);
-    std::ostringstream moi;
-    std::string chuoi;
+static bool chuyenDongCu(const string& dong, int loai, string& ketQua){
+    istringstream luong(dong);
+    ostringstream moi;
+    string chuoi;
     for(int i = 0; i < 3; i++){
         if(!docChuoiCu(luong, chuoi)){
             return false;
@@ -378,7 +379,7 @@ static bool chuyenDongCu(const std::string& dong, int loai, std::string& ketQua)
 }
 
 //=====ham doc tep=====
-bool QuanLyTaiLieu::doc(const std::string& thuMuc, std::string& loi){
+bool QuanLyTaiLieu::doc(const string& thuMuc, string& loi){
     loi.clear();
     for(int i = 0; i < ds.laySoLuong(); i++){
         if(dangMuon(*ds[i])){
@@ -387,9 +388,9 @@ bool QuanLyTaiLieu::doc(const std::string& thuMuc, std::string& loi){
         }
     }
     QuanLyTaiLieu tam;
-    std::string loai[] = {"Sach", "TapChi", "Bao"};
+    string loai[] = {"Sach", "TapChi", "Bao"};
     for(int k = 0; k < 3; k++){
-        std::ifstream tep(thuMuc + "/" + loai[k] + ".txt");
+        ifstream tep(thuMuc + "/" + loai[k] + ".txt");
         if(!tep){
             loi = "Khong mo duoc tep " + loai[k];
             return false;
@@ -402,15 +403,15 @@ bool QuanLyTaiLieu::doc(const std::string& thuMuc, std::string& loi){
         }
         int soBanGhi = 0;
         while(true){
-            std::string noiDung;
+            string noiDung;
             if(dinhDangMoi){
                 if(soBanGhi == n){
                     break;
                 }
             }
             else{
-                std::string dong;
-                if(!std::getline(tep, dong)){
+                string dong;
+                if(!getline(tep, dong)){
                     break;
                 }
                 if(!chuoiHopLe(dong)){
@@ -438,7 +439,7 @@ bool QuanLyTaiLieu::doc(const std::string& thuMuc, std::string& loi){
                 docDuoc = taiLieu->nhap(tep);
             }
             else{
-                std::istringstream luong(noiDung);
+                istringstream luong(noiDung);
                 docDuoc = taiLieu->nhap(luong);
             }
             if(!docDuoc || !tam.them(taiLieu)){

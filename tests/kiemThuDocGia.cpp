@@ -11,38 +11,39 @@
 #include <sstream>
 #include <type_traits>
 #include <limits>
+using namespace std;
 
 //=====du lieu dung rieng cho kiem thu=====
-SinhVien taoSinhVien(std::string ma, int soMuon = 0, bool hoatDong = true){
+SinhVien taoSinhVien(string ma, int soMuon = 0, bool hoatDong = true){
     return SinhVien("N_" + ma, "Nguyen Van An", "29/02/2004", "an@dh.edu",
                    "0901234567", ma, soMuon, hoatDong, "SV_" + ma, "CT1", "CNTT", "Phan mem");
 }
 
-GiangVien taoGiangVien(std::string ma, int soMuon = 0, int soNam = 10){
+GiangVien taoGiangVien(string ma, int soMuon = 0, int soNam = 10){
     return GiangVien("N_" + ma, "Le Giang Vien", "01/01/1980", "gv@dh.edu",
                      "0901234568", ma, soMuon, true, "GV_" + ma, "CNTT", "Tien si", soNam);
 }
 
-NhanVienThuThu taoNhanVien(std::string ma, double heSo = 2, double luong = 5000000){
+NhanVienThuThu taoNhanVien(string ma, double heSo = 2, double luong = 5000000){
     return NhanVienThuThu("N_" + ma, "Le Nhan Vien", "01/01/1990", "nv@dh.edu",
                          "0901234567", ma, "Sang", "Thu thu", luong, heSo);
 }
 
-ThuThuTruong taoTruong(std::string ma, std::string maDocGia = "DG_TT",
+ThuThuTruong taoTruong(string ma, string maDocGia = "DG_TT",
                        int soNhanVien = 11, double phuCap = 2){
     return ThuThuTruong("N_" + ma, "Tran Thu Thu", "01/01/1980", "tt@dh.edu",
                        "0901234567", maDocGia, "GV_" + ma, "CNTT", "Tien si", 10,
                        ma, "Sang", "Truong", 5000000, 2, "Tang 1", soNhanVien, phuCap);
 }
 
-std::string noiDung(const NhanVienThuThu& nguoi){
-    std::ostringstream tep;
+string noiDung(const NhanVienThuThu& nguoi){
+    ostringstream tep;
     nguoi.ghi(tep);
     return tep.str();
 }
 
-std::string noiDungDocGia(const DocGia& nguoi){
-    std::ostringstream tep;
+string noiDungDocGia(const DocGia& nguoi){
+    ostringstream tep;
     nguoi.ghi(tep);
     return tep.str();
 }
@@ -60,8 +61,8 @@ public:
 
 //=====kiem tra lop va du lieu nhap=====
 void kiemThuLop(){
-    kiemTra(std::is_abstract<DocGia>::value, "DocGia truu tuong");
-    kiemTra(std::has_virtual_destructor<Nguoi>::value, "Nguoi huy ao");
+    kiemTra(is_abstract<DocGia>::value, "DocGia truu tuong");
+    kiemTra(has_virtual_destructor<Nguoi>::value, "Nguoi huy ao");
     SinhVien sv = taoSinhVien("SV", 2);
     GiangVien gv = taoGiangVien("GV", 3);
     DocGia* ds[] = {&sv, &gv};
@@ -83,31 +84,31 @@ void kiemThuLop(){
     Nguoi sai("N", "Ten", "01/01/2000", "sai", "abc");
     kiemTra(!sai.hopLe(), "Email dien thoai sai");
     int so = 7;
-    std::istringstream saiSo("12abc\n");
+    istringstream saiSo("12abc\n");
     kiemTra(!nhapSo(saiSo, "", so) && so == 7, "So lan chu giu gia tri");
-    std::istringstream quaLon("999999999999999999999\n");
+    istringstream quaLon("999999999999999999999\n");
     kiemTra(!nhapSo(quaLon, "", so), "So vuot mien int");
     double thuc = 0;
-    std::istringstream nan("nan\n");
+    istringstream nan("nan\n");
     kiemTra(!nhapSo(nan, "", thuc), "Tu choi NaN");
-    std::istringstream nhapSv(noiDungDocGia(sv));
+    istringstream nhapSv(noiDungDocGia(sv));
     SinhVien docSv;
     kiemTra(docSv.nhap(nhapSv) && noiDungDocGia(docSv) == noiDungDocGia(sv), "Nhap xuat sinh vien");
-    std::istringstream nhapGv(noiDungDocGia(gv));
+    istringstream nhapGv(noiDungDocGia(gv));
     GiangVien docGv;
     kiemTra(docGv.nhap(nhapGv) && noiDungDocGia(docGv) == noiDungDocGia(gv), "Nhap xuat giang vien");
-    std::string cu = noiDungDocGia(docSv);
-    std::istringstream nhapSai("\n");
+    string cu = noiDungDocGia(docSv);
+    istringstream nhapSai("\n");
     kiemTra(!docSv.nhap(nhapSai) && noiDungDocGia(docSv) == cu, "Nhap sai giu sinh vien");
-    std::istringstream eof("");
+    istringstream eof("");
     kiemTra(!docGv.nhap(eof), "Nhap EOF");
     NhanVienThuThu nv = taoNhanVien("NV");
     kiemTra(nv.hopLe() && nv.tinhLuong() == 10000000, "Tinh luong");
     kiemTra(!taoNhanVien("NV", 0).hopLe() && !taoNhanVien("NV", -1).hopLe(), "He so luong sai");
     kiemTra(!taoNhanVien("NV", 1, 0).hopLe() && !taoNhanVien("NV", 1, -1).hopLe(), "Luong co ban sai");
-    kiemTra(!taoNhanVien("NV", std::numeric_limits<double>::infinity()).hopLe(), "Luong khong huu han");
+    kiemTra(!taoNhanVien("NV", numeric_limits<double>::infinity()).hopLe(), "Luong khong huu han");
     NhanVienThuThu docNv;
-    std::istringstream nhapNv(noiDung(nv));
+    istringstream nhapNv(noiDung(nv));
     kiemTra(docNv.nhap(nhapNv) && noiDung(docNv) == noiDung(nv), "Nhap xuat nhan vien");
     ThuThuTruong tt = taoTruong("TT");
     kiemTra(tt.hopLe() && tt.tinhThuNhap() == 14000000, "Thu nhap truong");
@@ -117,23 +118,23 @@ void kiemThuLop(){
     Nguoi* nhanhNv = static_cast<NhanVienThuThu*>(&tt);
     kiemTra(nhanhGv == nhanhNv, "Chung mot Nguoi qua ke thua ao");
     ThuThuTruong docTt;
-    std::istringstream nhapTt(noiDung(tt));
+    istringstream nhapTt(noiDung(tt));
     kiemTra(docTt.nhap(nhapTt) && noiDung(docTt) == noiDung(tt), "Nhap du hai nhanh truong");
     cu = noiDung(docTt);
-    std::istringstream thieu("N\nTen\n01/01/1980\n");
+    istringstream thieu("N\nTen\n01/01/1980\n");
     kiemTra(!docTt.nhap(thieu) && noiDung(docTt) == cu, "Nhap thieu giu truong");
-    std::ostringstream xuat;
-    std::streambuf* coutCu = std::cout.rdbuf(xuat.rdbuf());
+    ostringstream xuat;
+    streambuf* coutCu = cout.rdbuf(xuat.rdbuf());
     ds[0]->xuat();
     ds[1]->xuat();
     tt.xuat();
-    std::cout.rdbuf(coutCu);
-    kiemTra(xuat.str().find("Nguyen Van An") != std::string::npos
-             && xuat.str().find("Le Giang Vien") != std::string::npos, "Xuat da hinh");
+    cout.rdbuf(coutCu);
+    kiemTra(xuat.str().find("Nguyen Van An") != string::npos
+             && xuat.str().find("Le Giang Vien") != string::npos, "Xuat da hinh");
 }
 
 //=====kiem tra quan ly doc gia=====
-void kiemThuDocGia(const std::filesystem::path& thuMuc){
+void kiemThuDocGia(const filesystem::path& thuMuc){
     QuanLyDocGia q;
     kiemTra(q.layDocGia(-1) == nullptr && !q.xoa("X"), "Danh sach rong");
     q.sapXepTheoSoMuon();
@@ -156,7 +157,7 @@ void kiemThuDocGia(const std::filesystem::path& thuMuc){
     kiemTra(q.sua("D1", new SinhVien(taoSinhVien("D1", 2, false))), "Sua trang thai tai khoan");
     q.sapXepTheoSoMuon();
     kiemTra(q.layDocGia(0)->layMa() == "D3" && q.layDocGia(2)->layMa() == "D1", "Bubble sort so muon");
-    std::string loi;
+    string loi;
     kiemTra(q.luu(thuMuc.string(), loi), "Luu hai loai doc gia");
     QuanLyDocGia doc;
     bool daDoc = doc.doc(thuMuc.string(), loi);
@@ -178,7 +179,7 @@ void kiemThuDocGia(const std::filesystem::path& thuMuc){
     {
         QuanLyDocGia boNho;
         for(int i = 0; i < 40; i++){
-            SinhVienDem* nguoi = new SinhVienDem(taoSinhVien("B" + std::to_string(i)));
+            SinhVienDem* nguoi = new SinhVienDem(taoSinhVien("B" + to_string(i)));
             bool daThem = boNho.them(nguoi);
             kiemTra(daThem, "Them khi tang suc chua");
             if(!daThem){
@@ -198,8 +199,8 @@ void kiemThuDocGia(const std::filesystem::path& thuMuc){
 }
 
 //=====kiem tra quan ly nhan su=====
-void kiemThuNhanSu(const std::filesystem::path& thuMuc){
-    std::string loi;
+void kiemThuNhanSu(const filesystem::path& thuMuc){
+    string loi;
     QuanLyNhanVien nv;
     kiemTra(nv.them(taoNhanVien("NV1", 3)) && nv.them(taoNhanVien("NV2", 1)), "Them nhan vien");
     kiemTra(!nv.them(taoNhanVien("NV1")), "Nhan vien trung ma");
@@ -284,53 +285,53 @@ void kiemThuTichHop(){
 
 //=====kiem tra hien thi luong va khoi phuc dinh dang=====
 void kiemThuDinhDangLuong(){
-    std::ios::fmtflags dinhDangBanDau = std::cout.flags();
-    std::streamsize doChinhXacBanDau = std::cout.precision();
+    ios::fmtflags dinhDangBanDau = cout.flags();
+    streamsize doChinhXacBanDau = cout.precision();
     NhanVienThuThu nv = taoNhanVien("NV_DD", 3);
     ThuThuTruong tt = taoTruong("TT_DD");
     const NhanVienThuThu* ds[] = {&nv, &tt};
     for(int cheDo = 0; cheDo < 3; cheDo++){
-        std::cout.unsetf(std::ios::floatfield);
-        std::cout.precision(6);
+        cout.unsetf(ios::floatfield);
+        cout.precision(6);
         if(cheDo == 1){
-            std::cout.setf(std::ios::scientific, std::ios::floatfield);
-            std::cout.precision(3);
+            cout.setf(ios::scientific, ios::floatfield);
+            cout.precision(3);
         }
         else if(cheDo == 2){
-            std::cout.setf(std::ios::fixed, std::ios::floatfield);
-            std::cout.precision(2);
+            cout.setf(ios::fixed, ios::floatfield);
+            cout.precision(2);
         }
         for(int i = 0; i < 2; i++){
-            std::ios::fmtflags dinhDangCu = std::cout.flags();
-            std::streamsize doChinhXacCu = std::cout.precision();
-            std::ostringstream heSo;
+            ios::fmtflags dinhDangCu = cout.flags();
+            streamsize doChinhXacCu = cout.precision();
+            ostringstream heSo;
             heSo.flags(dinhDangCu);
             heSo.precision(doChinhXacCu);
             heSo << "He so luong: " << ds[i]->layHeSoLuong() << '\n';
-            std::ostringstream xuat;
-            std::streambuf* luongCu = std::cout.rdbuf(xuat.rdbuf());
+            ostringstream xuat;
+            streambuf* luongCu = cout.rdbuf(xuat.rdbuf());
             ds[i]->xuat();
-            std::cout.rdbuf(luongCu);
-            kiemTra(xuat.str().find("Luong co ban: 5000000\n") != std::string::npos,
+            cout.rdbuf(luongCu);
+            kiemTra(xuat.str().find("Luong co ban: 5000000\n") != string::npos,
                      "Luong nhan vien va truong khong dung ky hieu khoa hoc");
-            kiemTra(xuat.str().find(heSo.str()) != std::string::npos,
+            kiemTra(xuat.str().find(heSo.str()) != string::npos,
                      "Dinh dang luong khong anh huong he so");
-            kiemTra(std::cout.flags() == dinhDangCu, "Khoi phuc flags cua cout");
-            kiemTra(std::cout.precision() == doChinhXacCu, "Khoi phuc precision cua cout");
+            kiemTra(cout.flags() == dinhDangCu, "Khoi phuc flags cua cout");
+            kiemTra(cout.precision() == doChinhXacCu, "Khoi phuc precision cua cout");
         }
     }
-    std::cout.flags(dinhDangBanDau);
-    std::cout.precision(doChinhXacBanDau);
+    cout.flags(dinhDangBanDau);
+    cout.precision(doChinhXacBanDau);
 
     NhanVienThuThu le = taoNhanVien("NV_LE", 3.25, 5000000.25);
-    std::string truoc = noiDung(le);
-    std::ostringstream xuat;
-    std::streambuf* luongCu = std::cout.rdbuf(xuat.rdbuf());
+    string truoc = noiDung(le);
+    ostringstream xuat;
+    streambuf* luongCu = cout.rdbuf(xuat.rdbuf());
     le.xuat();
-    std::cout.rdbuf(luongCu);
-    kiemTra(xuat.str().find("Luong co ban: 5000000\n") != std::string::npos,
+    cout.rdbuf(luongCu);
+    kiemTra(xuat.str().find("Luong co ban: 5000000\n") != string::npos,
              "Luong le chi lam tron khi hien thi");
-    kiemTra(xuat.str().find("He so luong: 3.25\n") != std::string::npos,
+    kiemTra(xuat.str().find("He so luong: 3.25\n") != string::npos,
              "Khong lam tron he so luong le");
     kiemTra(le.tinhLuong() == 16250000.8125, "Khong thay doi gia tri va cong thuc luong");
     kiemTra(noiDung(le) == truoc, "Khong thay doi du lieu ghi tep");
@@ -338,18 +339,18 @@ void kiemThuDinhDangLuong(){
 }
 
 int main(int argc, char* argv[]){
-    if(argc != 2 || !std::filesystem::is_directory(argv[1]) || !std::filesystem::is_empty(argv[1])){
-        std::cerr << "Can thu muc kiem thu rieng, rong va da ton tai\n";
+    if(argc != 2 || !filesystem::is_directory(argv[1]) || !filesystem::is_empty(argv[1])){
+        cerr << "Can thu muc kiem thu rieng, rong va da ton tai\n";
         return 2;
     }
-    std::filesystem::path goc(argv[1]);
-    std::filesystem::create_directory(goc / "docgia");
-    std::filesystem::create_directory(goc / "nhansu");
+    filesystem::path goc(argv[1]);
+    filesystem::create_directory(goc / "docgia");
+    filesystem::create_directory(goc / "nhansu");
     kiemThuLop();
     kiemThuDocGia(goc / "docgia");
     kiemThuNhanSu(goc / "nhansu");
     kiemThuTichHop();
     kiemThuDinhDangLuong();
-    std::cout << "Dat: " << soKiemTra - soLoi << ", khong dat: " << soLoi << '\n';
+    cout << "Dat: " << soKiemTra - soLoi << ", khong dat: " << soLoi << '\n';
     return ketQuaKiemThu();
 }

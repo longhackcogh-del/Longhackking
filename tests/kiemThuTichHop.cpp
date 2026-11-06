@@ -6,9 +6,10 @@
 #include "../SinhVien.h"
 #include <sstream>
 #include <iomanip>
+using namespace std;
 
 //=====du lieu nhap cua ca kiem thu=====
-static SinhVien taoSinhVien(const std::string& ma, int soMuon = 0, bool hoatDong = true){
+static SinhVien taoSinhVien(const string& ma, int soMuon = 0, bool hoatDong = true){
     return SinhVien("N_" + ma, "Nguyen Van An", "01/01/2004", "an@dh.edu", "0901234567",
                     ma, soMuon, hoatDong, "SV_" + ma, "CT1", "CNTT", "Phan mem");
 }
@@ -19,7 +20,7 @@ static ThuThuTruong taoThuThu(){
                         "TT01", "Sang", "Truong", 5000000, 2, "Tang 1", 12, 1);
 }
 
-static bool themSach(QuanLyThuVien& thuVien, const std::string& ma, int tong = 3, int con = 3){
+static bool themSach(QuanLyThuVien& thuVien, const string& ma, int tong = 3, int con = 3){
     Sach* sach = new Sach(ma, "Lap trinh", "NXB DH", 2022, tong, con, 120000,
                           "Nguyen Van A", "Tin hoc", "ISBN01", 100);
     if(!thuVien.themTaiLieu(sach)){
@@ -29,7 +30,7 @@ static bool themSach(QuanLyThuVien& thuVien, const std::string& ma, int tong = 3
     return true;
 }
 
-static bool themSinhVien(QuanLyThuVien& thuVien, const std::string& ma,
+static bool themSinhVien(QuanLyThuVien& thuVien, const string& ma,
                          int soMuon = 0, bool hoatDong = true, int viTri = 0){
     SinhVien* nguoi = new SinhVien(taoSinhVien(ma, soMuon, hoatDong));
     if(!thuVien.themDocGia(nguoi, viTri)){
@@ -40,8 +41,8 @@ static bool themSinhVien(QuanLyThuVien& thuVien, const std::string& ma,
 }
 
 //=====ham chup du lieu de kiem tra thao tac that bai=====
-static std::string chupHeThong(QuanLyThuVien& thuVien){
-    std::ostringstream tep;
+static string chupHeThong(QuanLyThuVien& thuVien){
+    ostringstream tep;
     tep << thuVien.layTaiLieu().laySoLuong() << '\n';
     for(int i = 0; i < thuVien.layTaiLieu().laySoLuong(); i++){
         thuVien.layTaiLieu().layTaiLieu(i)->ghi(tep);
@@ -76,11 +77,11 @@ static void kiemThuSuaVaiTro(){
     kiemTra(thuVien.themThuThuTruong(taoThuThu()), "vai tro: them thu thu va doc gia");
     kiemTra(thuVien.lapPhieu(PhieuMuon("P01", "DG_TT", "S01", "01/01/2026", "03/01/2026", 1)),
              "vai tro: muon truoc khi sua");
-    std::string truoc = chupHeThong(thuVien);
+    string truoc = chupHeThong(thuVien);
     kiemTra(!thuVien.suaThuThuTruong("TT01", taoThuThu()), "vai tro: tu choi sua sai so dang muon");
     kiemTra(chupHeThong(thuVien) == truoc, "vai tro: sua that bai giu ca sau danh sach");
 
-    std::istringstream nhap(
+    istringstream nhap(
         "N_TT\nTran Thi Thu Moi\n01/01/1980\nthu.moi@dh.edu\n0901234568\n"
         "DG_TT\n1\n0\nGV_TT\nCNTT\nTien si\n10\n"
         "TT01\nChieu\nTruong\n5000000\n3\nTang 2\n15\n2\n");
@@ -96,8 +97,8 @@ static void kiemThuSuaVaiTro(){
     kiemTra(docGia->laySoDangMuon() == 1 && thuThu->laySoDangMuon() == 1, "vai tro: giu so dang muon");
     kiemTra(thuVien.layTaiLieu().timTheoMa("S01")->laySoLuongCon() == 2, "vai tro: sua khong doi kho");
     kiemTra(thuThu->tinhThuNhap() == 19000000, "vai tro: cap nhat luong va phu cap dung cong thuc");
-    std::ostringstream a;
-    std::ostringstream b;
+    ostringstream a;
+    ostringstream b;
     docGia->ghi(a);
     thuThu->GiangVien::ghi(b);
     kiemTra(a.str() == b.str(), "vai tro: dong bo toan bo thong tin GiangVien");
@@ -121,7 +122,7 @@ static void kiemThuPhucHoiLienKet(){
     kiemTra(themSach(thuVien, "S01"), "phuc hoi: tai lieu co san");
     kiemTra(thuVien.lapPhieu(PhieuMuon("P01", "DG01", "S01", "01/01/2026", "03/01/2026", 1)),
              "phuc hoi: phieu lien ket co san");
-    std::string truoc = chupHeThong(thuVien);
+    string truoc = chupHeThong(thuVien);
     // Khac ma doc gia nhung trung maNguoi: them vai tro doc gia se that bai.
     ThuThuTruong trungNguoi("N_DG01", "Tran Thi Thu", "01/01/1980", "thu@dh.edu", "0901234568",
                             "DG_TT", "GV_TT", "CNTT", "Tien si", 10,
@@ -153,52 +154,52 @@ static void kiemThuXuatTien(){
     NhatKyViPham viPham("V", "P", "D", 1, 12000000);
     const NhanVienThuThu nhanVien("N", "Ten", "01/01/1980", "a@dh.edu", "0901234567",
                                 "NV", "Sang", "Thu thu", 5000000.25, 3.25);
-    std::ios::fmtflags dinhDangBanDau = std::cout.flags();
-    std::streamsize doChinhXacBanDau = std::cout.precision();
-    std::ostringstream ghiTruoc;
+    ios::fmtflags dinhDangBanDau = cout.flags();
+    streamsize doChinhXacBanDau = cout.precision();
+    ostringstream ghiTruoc;
     sach.ghi(ghiTruoc);
     nhanVien.ghi(ghiTruoc);
     viPham.ghi(ghiTruoc);
     for(int cheDo = 0; cheDo < 3; cheDo++){
-        std::ostringstream tep;
+        ostringstream tep;
         if(cheDo == 1){
-            tep << std::scientific << std::setprecision(3);
+            tep << scientific << setprecision(3);
         }
         else if(cheDo == 2){
-            tep << std::fixed << std::setprecision(2);
+            tep << fixed << setprecision(2);
         }
-        std::ios::fmtflags dinhDangCu = tep.flags();
-        std::streamsize doChinhXacCu = tep.precision();
+        ios::fmtflags dinhDangCu = tep.flags();
+        streamsize doChinhXacCu = tep.precision();
         xuatTien(tep, 12000000.25);
         kiemTra(tep.str() == "12000000", "tien: xuat so tien khong dung ky hieu khoa hoc");
         kiemTra(tep.flags() == dinhDangCu && tep.precision() == doChinhXacCu,
                  "tien: khoi phuc dinh dang luong bat ky");
         PhieuMuon phieu("P", "D", "S", "01/01/2026", "03/01/2026", 1);
-        std::ostringstream xuatPhieu;
+        ostringstream xuatPhieu;
         xuatPhieu.flags(dinhDangCu);
         xuatPhieu.precision(doChinhXacCu);
         xuatPhieu << phieu;
-        kiemTra(xuatPhieu.str().find("Tien phat: 0\n") != std::string::npos, "tien: operator xuat phieu dung dinh dang tien");
+        kiemTra(xuatPhieu.str().find("Tien phat: 0\n") != string::npos, "tien: operator xuat phieu dung dinh dang tien");
         kiemTra(xuatPhieu.flags() == dinhDangCu && xuatPhieu.precision() == doChinhXacCu,
                  "tien: operator xuat phieu khong doi dinh dang");
 
-        std::cout.flags(dinhDangCu);
-        std::cout.precision(doChinhXacCu);
-        std::ostringstream xuat;
-        std::streambuf* luongCu = std::cout.rdbuf(xuat.rdbuf());
+        cout.flags(dinhDangCu);
+        cout.precision(doChinhXacCu);
+        ostringstream xuat;
+        streambuf* luongCu = cout.rdbuf(xuat.rdbuf());
         sach.xuat();
         nhanVien.xuat();
         viPham.xuat();
-        std::cout.rdbuf(luongCu);
-        kiemTra(xuat.str().find("Gia tri: 5000000\n") != std::string::npos, "tien: gia tri tai lieu du chu so");
-        kiemTra(xuat.str().find("Luong co ban: 5000000\n") != std::string::npos, "tien: luong co ban du chu so");
-        kiemTra(xuat.str().find("Tien phat: 12000000\n") != std::string::npos, "tien: tien phat lon du chu so");
-        kiemTra(std::cout.flags() == dinhDangCu && std::cout.precision() == doChinhXacCu,
+        cout.rdbuf(luongCu);
+        kiemTra(xuat.str().find("Gia tri: 5000000\n") != string::npos, "tien: gia tri tai lieu du chu so");
+        kiemTra(xuat.str().find("Luong co ban: 5000000\n") != string::npos, "tien: luong co ban du chu so");
+        kiemTra(xuat.str().find("Tien phat: 12000000\n") != string::npos, "tien: tien phat lon du chu so");
+        kiemTra(cout.flags() == dinhDangCu && cout.precision() == doChinhXacCu,
                  "tien: xuat tai lieu nhan vien vi pham giu dinh dang cout");
     }
-    std::cout.flags(dinhDangBanDau);
-    std::cout.precision(doChinhXacBanDau);
-    std::ostringstream ghiSau;
+    cout.flags(dinhDangBanDau);
+    cout.precision(doChinhXacBanDau);
+    ostringstream ghiSau;
     sach.ghi(ghiSau);
     nhanVien.ghi(ghiSau);
     viPham.ghi(ghiSau);
@@ -226,7 +227,7 @@ static void kiemThuNhanThan(){
     ThuThuTruong tt = taoThuThu();
     NhanVienThuThu nv = static_cast<const NhanVienThuThu&>(tt);
     kiemTra(thuVien.themNhanVien(nv), "nhan su: them nhan vien qua dieu phoi");
-    std::string truoc = chupHeThong(thuVien);
+    string truoc = chupHeThong(thuVien);
     NhanVienThuThu trungMa("N_KHAC", "Nguoi khac", "01/01/1980", "khac@dh.edu", "0901234567",
                            "TT01", "Sang", "Thu thu", 5000000, 2);
     kiemTra(!thuVien.themNhanVien(trungMa), "nhan su: trung ma nhan vien");
@@ -285,7 +286,7 @@ static void kiemThuChuyenVaiTro(){
     }
     kiemTra(themSach(thuVien, "S01"), "chuyen: kho co san");
     kiemTra(thuVien.lapPhieu(PhieuMuon("P01", "DG_TT", "S01", "01/01/2026", "03/01/2026", 1)), "chuyen: nhan vien dang muon");
-    std::string truoc = chupHeThong(thuVien);
+    string truoc = chupHeThong(thuVien);
     kiemTra(!thuVien.chuyenThanhThuThuTruong("TT01", tt), "chuyen: sai so dang muon bi tu choi");
     kiemTra(!thuVien.chuyenThanhThuThuTruong("KHONGCO", tt), "chuyen: ma nguon khong ton tai");
     kiemTra(chupHeThong(thuVien) == truoc, "chuyen: sai dau vao giu ca sau danh sach");
@@ -322,7 +323,7 @@ static void kiemThuChuyenVaiTro(){
     kiemTra(thuVien.traTaiLieu("P01", "05/01/2026"), "chuyen: tra tre sau khi len truong");
     kiemTra(thuVien.duyetViPham("VP_P01", "TT01"), "chuyen: duyet khi dang la truong");
     kiemTra(thuVien.lapPhieu(PhieuMuon("P02", "DG_TT", "S01", "01/01/2026", "03/01/2026", 1)), "chuyen: muon tiep truoc khi ve nhan vien");
-    std::ostringstream lichSu;
+    ostringstream lichSu;
     thuVien.layPhieuMuon().timTheoMa("P01")->ghi(lichSu);
     thuVien.layPhieuMuon().timTheoMa("P02")->ghi(lichSu);
     thuVien.layViPham().timTheoMa("VP_P01")->ghi(lichSu);
@@ -331,7 +332,7 @@ static void kiemThuChuyenVaiTro(){
              "chuyen: ve nhan vien khong giu ban sao truong");
     kiemTra(thuVien.layNhanVien().timTheoMa("TT01")->cungThongTinCaNhan(nv), "chuyen: ve nhan vien giu nhan than");
     kiemTra(thuVien.layDocGia().timTheoMa("DG_TT")->laySoDangMuon() == 1, "chuyen: giu so muon khi bo vai tro truong");
-    std::ostringstream sau;
+    ostringstream sau;
     thuVien.layPhieuMuon().timTheoMa("P01")->ghi(sau);
     thuVien.layPhieuMuon().timTheoMa("P02")->ghi(sau);
     thuVien.layViPham().timTheoMa("VP_P01")->ghi(sau);
@@ -490,12 +491,12 @@ int main(){
     kiemTra(!thuVien.suaThuThuTruong("TT01", tt), "tu choi sua sai so muon");
     kiemTra(thuVien.traTaiLieu("P_TT", "03/01/2026"), "thu thu tra");
     kiemTra(thuVien.layThuThuTruong().timTheoMa("TT01")->laySoDangMuon() == 0, "dong bo thu thu sau tra");
-    std::ostringstream hoSo;
+    ostringstream hoSo;
     thuVien.layDocGia().timTheoMa("DG_TT")->ghi(hoSo);
-    std::istringstream dauVao(hoSo.str());
+    istringstream dauVao(hoSo.str());
     GiangVien gvDocLai;
     kiemTra(gvDocLai.nhap(dauVao), "vai tro doc gia ghi dung dinh dang giang vien");
-    dauVao >> std::ws;
+    dauVao >> ws;
     kiemTra(dauVao.eof(), "khong ghi them truong nhan vien vao ho so giang vien");
     kiemTra(thuVien.chuyenThanhNhanVien("TT01"), "bo vai tro truong va giu nhan vien");
     kiemTra(thuVien.layDocGia().timTheoMa("DG_TT") != nullptr, "giu ho so doc gia sau bo vai tro");

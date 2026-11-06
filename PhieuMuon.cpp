@@ -3,6 +3,7 @@
 #include "TaiLieu.h"
 #include "ThuatToan.h"
 #include <iomanip>
+using namespace std;
 
 //=====ham khoi tao=====
 PhieuMuon::PhieuMuon(){
@@ -12,8 +13,8 @@ PhieuMuon::PhieuMuon(){
     trangThai = "Dang muon";
 }
 
-PhieuMuon::PhieuMuon(std::string ma, std::string docGia, std::string taiLieu,
-                     std::string ngay, std::string han, int soLuong){
+PhieuMuon::PhieuMuon(string ma, string docGia, string taiLieu,
+                     string ngay, string han, int soLuong){
     maPhieu = ma;
     maDocGia = docGia;
     maTaiLieu = taiLieu;
@@ -35,7 +36,7 @@ bool PhieuMuon::hopLe() const{
     if(!ngayHopLe(ngayMuon) || !ngayHopLe(hanTra) || doiNgay(hanTra) < doiNgay(ngayMuon)){
         return false;
     }
-    if(soLuongMuon <= 0 || !std::isfinite(tienPhat) || tienPhat < 0){
+    if(soLuongMuon <= 0 || !isfinite(tienPhat) || tienPhat < 0){
         return false;
     }
     if(trangThai == "Dang muon"){
@@ -55,7 +56,7 @@ bool PhieuMuon::hopLe() const{
 }
 
 //=====ham nhap=====
-bool PhieuMuon::nhap(std::istream& luong){
+bool PhieuMuon::nhap(istream& luong){
     PhieuMuon tam;
     if(!nhapChuoi(luong, "Nhap ma phieu: ", tam.maPhieu)){
         return false;
@@ -102,27 +103,27 @@ bool PhieuMuon::lapPhieu(DocGia& docGia, TaiLieu& taiLieu){
 }
 
 //=====ham tinh so ngay tre=====
-int PhieuMuon::tinhSoNgayTre(const std::string& ngay) const{
+int PhieuMuon::tinhSoNgayTre(const string& ngay) const{
     if(!ngayHopLe(ngay) || !hopLe() || doiNgay(ngay) < doiNgay(ngayMuon)){
         return -1;
     }
     return timMax(0, doiNgay(ngay) - doiNgay(hanTra));
 }
 
-double PhieuMuon::tinhTienPhat(const TaiLieu& taiLieu, const std::string& ngay) const{
+double PhieuMuon::tinhTienPhat(const TaiLieu& taiLieu, const string& ngay) const{
     int soNgayTre = tinhSoNgayTre(ngay);
     if(!taiLieu.hopLe() || taiLieu.layMa() != maTaiLieu || soNgayTre < 0){
         return -1;
     }
     double phat = taiLieu.tinhTienPhat(soNgayTre) * soLuongMuon;
-    if(!std::isfinite(phat) || phat < 0 || (soNgayTre == 0 && phat != 0)){
+    if(!isfinite(phat) || phat < 0 || (soNgayTre == 0 && phat != 0)){
         return -1;
     }
     return phat;
 }
 
 //=====ham tra tai lieu=====
-bool PhieuMuon::traTaiLieu(DocGia& docGia, TaiLieu& taiLieu, const std::string& ngay){
+bool PhieuMuon::traTaiLieu(DocGia& docGia, TaiLieu& taiLieu, const string& ngay){
     int soNgayTre = tinhSoNgayTre(ngay);
     if(!hopLe() || !dangMuon() || soNgayTre < 0){
         return false;
@@ -139,7 +140,7 @@ bool PhieuMuon::traTaiLieu(DocGia& docGia, TaiLieu& taiLieu, const std::string& 
         return false;
     }
     double phat = tinhTienPhat(taiLieu, ngay);
-    if(!std::isfinite(phat) || phat < 0 || (soNgayTre == 0 && phat != 0)){
+    if(!isfinite(phat) || phat < 0 || (soNgayTre == 0 && phat != 0)){
         return false;
     }
     taiLieu.tangSoLuong(soLuongMuon);
@@ -150,7 +151,7 @@ bool PhieuMuon::traTaiLieu(DocGia& docGia, TaiLieu& taiLieu, const std::string& 
     return true;
 }
 
-bool PhieuMuon::quaHan(const std::string& ngay) const{
+bool PhieuMuon::quaHan(const string& ngay) const{
     return dangMuon() && tinhSoNgayTre(ngay) > 0;
 }
 
@@ -168,7 +169,7 @@ bool PhieuMuon::operator<(const PhieuMuon& khac) const{
     return maPhieu < khac.maPhieu;
 }
 
-std::ostream& operator<<(std::ostream& luong, const PhieuMuon& phieu){
+ostream& operator<<(ostream& luong, const PhieuMuon& phieu){
     luong << "Ma phieu: " << phieu.maPhieu << '\n';
     luong << "Doc gia: " << phieu.maDocGia << '\n';
     luong << "Tai lieu: " << phieu.maTaiLieu << '\n';
@@ -184,7 +185,7 @@ std::ostream& operator<<(std::ostream& luong, const PhieuMuon& phieu){
 }
 
 //=====ham doc ghi tep=====
-void PhieuMuon::ghi(std::ostream& tep) const{
+void PhieuMuon::ghi(ostream& tep) const{
     tep << maPhieu << '\n';
     tep << maDocGia << '\n';
     tep << maTaiLieu << '\n';
@@ -193,10 +194,10 @@ void PhieuMuon::ghi(std::ostream& tep) const{
     tep << soLuongMuon << '\n';
     tep << ngayTra << '\n';
     tep << trangThai << '\n';
-    tep << std::setprecision(17) << tienPhat << '\n';
+    tep << setprecision(17) << tienPhat << '\n';
 }
 
-bool PhieuMuon::doc(std::istream& tep){
+bool PhieuMuon::doc(istream& tep){
     PhieuMuon tam;
     if(!tam.nhap(tep)){
         return false;
@@ -211,23 +212,23 @@ bool PhieuMuon::doc(std::istream& tep){
     return true;
 }
 
-std::string PhieuMuon::layMa() const{
+string PhieuMuon::layMa() const{
     return maPhieu;
 }
 
-std::string PhieuMuon::layMaDocGia() const{
+string PhieuMuon::layMaDocGia() const{
     return maDocGia;
 }
 
-std::string PhieuMuon::layMaTaiLieu() const{
+string PhieuMuon::layMaTaiLieu() const{
     return maTaiLieu;
 }
 
-std::string PhieuMuon::layNgayMuon() const{
+string PhieuMuon::layNgayMuon() const{
     return ngayMuon;
 }
 
-std::string PhieuMuon::layNgayTra() const{
+string PhieuMuon::layNgayTra() const{
     return ngayTra;
 }
 

@@ -1,5 +1,6 @@
 #include "DocGia.h"
 #include "TaiLieu.h"
+using namespace std;
 
 //=====ham khoi tao=====
 DocGia::DocGia(){
@@ -8,7 +9,7 @@ DocGia::DocGia(){
     dangHoatDong = true;
 }
 
-DocGia::DocGia(std::string ma, int soMuon, int gioiHan, bool hoatDong){
+DocGia::DocGia(string ma, int soMuon, int gioiHan, bool hoatDong){
     maDocGia = ma;
     soTaiLieuDangMuon = soMuon;
     gioiHanMuon = gioiHan;
@@ -27,7 +28,7 @@ bool DocGia::hopLe() const{
 }
 
 //=====ham nhap=====
-bool DocGia::nhapDocGiaRieng(std::istream& luong){
+bool DocGia::nhapDocGiaRieng(istream& luong){
     int hoatDong = 0;
     if(!nhapChuoi(luong, "Nhap ma doc gia: ", maDocGia)){
         return false;
@@ -46,7 +47,7 @@ bool DocGia::nhapDocGiaRieng(std::istream& luong){
     return soTaiLieuDangMuon >= 0 && soTaiLieuDangMuon <= gioiHanMuon;
 }
 
-bool DocGia::nhap(std::istream& luong){
+bool DocGia::nhap(istream& luong){
     if(!Nguoi::nhap(luong)){
         return false;
     }
@@ -55,14 +56,14 @@ bool DocGia::nhap(std::istream& luong){
 
 //=====ham xuat=====
 void DocGia::xuatDocGiaRieng() const{
-    std::cout << "Ma doc gia: " << maDocGia << '\n';
-    std::cout << "So dang muon: " << soTaiLieuDangMuon << '\n';
-    std::cout << "Gioi han: " << layGioiHanMuon() << '\n';
+    cout << "Ma doc gia: " << maDocGia << '\n';
+    cout << "So dang muon: " << soTaiLieuDangMuon << '\n';
+    cout << "Gioi han: " << layGioiHanMuon() << '\n';
     if(dangHoatDong){
-        std::cout << "Tai khoan: hoat dong\n";
+        cout << "Tai khoan: hoat dong\n";
     }
     else{
-        std::cout << "Tai khoan: bi khoa\n";
+        cout << "Tai khoan: bi khoa\n";
     }
 }
 
@@ -71,13 +72,13 @@ void DocGia::xuat() const{
     xuatDocGiaRieng();
 }
 
-void DocGia::ghiDocGiaRieng(std::ostream& tep) const{
+void DocGia::ghiDocGiaRieng(ostream& tep) const{
     tep << maDocGia << '\n';
     tep << soTaiLieuDangMuon << '\n';
     tep << dangHoatDong << '\n';
 }
 
-std::string DocGia::layMa() const{
+string DocGia::layMa() const{
     return maDocGia;
 }
 

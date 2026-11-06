@@ -1,4 +1,5 @@
 #include "GiangVien.h"
+using namespace std;
 
 //=====ham khoi tao=====
 GiangVien::GiangVien(){
@@ -9,9 +10,9 @@ GiangVien::GiangVien(){
     soNamCongTac = 0;
 }
 
-GiangVien::GiangVien(std::string maNguoi, std::string ten, std::string ngay,
-              std::string email, std::string dienThoai, std::string maDocGia,
-              int soMuon, bool hoatDong, std::string maGiangVien, std::string boMon, std::string hocVi, int soNamCongTac)
+GiangVien::GiangVien(string maNguoi, string ten, string ngay,
+              string email, string dienThoai, string maDocGia,
+              int soMuon, bool hoatDong, string maGiangVien, string boMon, string hocVi, int soNamCongTac)
     : Nguoi(maNguoi, ten, ngay, email, dienThoai),
       DocGia(maDocGia, soMuon, 10, hoatDong){
     this->maGiangVien = maGiangVien;
@@ -35,12 +36,12 @@ int GiangVien::layGioiHanMuon() const{
     return 10;
 }
 
-std::string GiangVien::layLoai() const{
+string GiangVien::layLoai() const{
     return "GiangVien";
 }
 
 //=====ham nhap=====
-bool GiangVien::nhapGiangVienRieng(std::istream& luong){
+bool GiangVien::nhapGiangVienRieng(istream& luong){
     if(!nhapChuoi(luong, "Nhap ma giang vien: ", maGiangVien)){
         return false;
     }
@@ -56,7 +57,7 @@ bool GiangVien::nhapGiangVienRieng(std::istream& luong){
     return soNamCongTac >= 0;
 }
 
-bool GiangVien::nhap(std::istream& luong){
+bool GiangVien::nhap(istream& luong){
     GiangVien tam;
     if(!tam.DocGia::nhap(luong)){
         return false;
@@ -73,10 +74,10 @@ bool GiangVien::nhap(std::istream& luong){
 
 //=====ham xuat=====
 void GiangVien::xuatGiangVienRieng() const{
-    std::cout << "ma giang vien: " << maGiangVien << '\n';
-    std::cout << "bo mon: " << boMon << '\n';
-    std::cout << "hoc vi: " << hocVi << '\n';
-    std::cout << "so nam cong tac: " << soNamCongTac << '\n';
+    cout << "ma giang vien: " << maGiangVien << '\n';
+    cout << "bo mon: " << boMon << '\n';
+    cout << "hoc vi: " << hocVi << '\n';
+    cout << "so nam cong tac: " << soNamCongTac << '\n';
 }
 
 void GiangVien::xuat() const{
@@ -85,14 +86,14 @@ void GiangVien::xuat() const{
 }
 
 //=====ham ghi tep=====
-void GiangVien::ghiGiangVienRieng(std::ostream& tep) const{
+void GiangVien::ghiGiangVienRieng(ostream& tep) const{
     tep << maGiangVien << '\n';
     tep << boMon << '\n';
     tep << hocVi << '\n';
     tep << soNamCongTac << '\n';
 }
 
-void GiangVien::ghi(std::ostream& tep) const{
+void GiangVien::ghi(ostream& tep) const{
     ghiNguoi(tep);
     ghiDocGiaRieng(tep);
     ghiGiangVienRieng(tep);

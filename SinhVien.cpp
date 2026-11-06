@@ -1,4 +1,5 @@
 #include "SinhVien.h"
+using namespace std;
 
 //=====ham khoi tao=====
 SinhVien::SinhVien(){
@@ -9,9 +10,9 @@ SinhVien::SinhVien(){
     nganhHoc = "";
 }
 
-SinhVien::SinhVien(std::string maNguoi, std::string ten, std::string ngay,
-              std::string email, std::string dienThoai, std::string maDocGia,
-              int soMuon, bool hoatDong, std::string maSinhVien, std::string lop, std::string khoa, std::string nganhHoc)
+SinhVien::SinhVien(string maNguoi, string ten, string ngay,
+              string email, string dienThoai, string maDocGia,
+              int soMuon, bool hoatDong, string maSinhVien, string lop, string khoa, string nganhHoc)
     : Nguoi(maNguoi, ten, ngay, email, dienThoai),
       DocGia(maDocGia, soMuon, 5, hoatDong){
     this->maSinhVien = maSinhVien;
@@ -35,13 +36,13 @@ int SinhVien::layGioiHanMuon() const{
     return 5;
 }
 
-std::string SinhVien::layLoai() const{
+string SinhVien::layLoai() const{
     return "SinhVien";
 }
 
 //=====ham nhap=====
 
-bool SinhVien::nhap(std::istream& luong){
+bool SinhVien::nhap(istream& luong){
     SinhVien tam;
     if(!tam.DocGia::nhap(luong)){
         return false;
@@ -69,15 +70,15 @@ bool SinhVien::nhap(std::istream& luong){
 
 void SinhVien::xuat() const{
     DocGia::xuat();
-    std::cout << "ma sinh vien: " << maSinhVien << '\n';
-    std::cout << "lop: " << lop << '\n';
-    std::cout << "khoa: " << khoa << '\n';
-    std::cout << "nganh hoc: " << nganhHoc << '\n';
+    cout << "ma sinh vien: " << maSinhVien << '\n';
+    cout << "lop: " << lop << '\n';
+    cout << "khoa: " << khoa << '\n';
+    cout << "nganh hoc: " << nganhHoc << '\n';
 }
 
 //=====ham ghi tep=====
 
-void SinhVien::ghi(std::ostream& tep) const{
+void SinhVien::ghi(ostream& tep) const{
     ghiNguoi(tep);
     ghiDocGiaRieng(tep);
     tep << maSinhVien << '\n';

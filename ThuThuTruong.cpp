@@ -1,6 +1,7 @@
 #include "ThuThuTruong.h"
 #include "QuanLyViPham.h"
 #include <iomanip>
+using namespace std;
 
 //=====ham khoi tao=====
 ThuThuTruong::ThuThuTruong(){
@@ -8,12 +9,12 @@ ThuThuTruong::ThuThuTruong(){
     heSoPhuCap = 0;
 }
 
-ThuThuTruong::ThuThuTruong(std::string maNguoi, std::string ten, std::string ngay,
-                         std::string email, std::string dienThoai,
-                         std::string maDocGia, std::string maGiangVien,
-                         std::string boMon, std::string hocVi, int soNam,
-                         std::string maNhanVien, std::string ca, std::string chuc,
-                         double luong, double heSo, std::string khuVuc, int soNhanVien, double phuCap)
+ThuThuTruong::ThuThuTruong(string maNguoi, string ten, string ngay,
+                         string email, string dienThoai,
+                         string maDocGia, string maGiangVien,
+                         string boMon, string hocVi, int soNam,
+                         string maNhanVien, string ca, string chuc,
+                         double luong, double heSo, string khuVuc, int soNhanVien, double phuCap)
     : Nguoi(maNguoi, ten, ngay, email, dienThoai),
       GiangVien(maNguoi, ten, ngay, email, dienThoai, maDocGia, 0, true,
                 maGiangVien, boMon, hocVi, soNam),
@@ -29,12 +30,12 @@ ThuThuTruong::~ThuThuTruong(){
 bool ThuThuTruong::hopLe() const{
     return GiangVien::hopLe() && NhanVienThuThu::hopLe()
         && chuoiHopLe(khuVucQuanLy) && soNhanVienQuanLy >= 0
-        && std::isfinite(heSoPhuCap) && heSoPhuCap >= 0
-        && std::isfinite(tinhThuNhap());
+        && isfinite(heSoPhuCap) && heSoPhuCap >= 0
+        && isfinite(tinhThuNhap());
 }
 
 //=====ham nhap=====
-bool ThuThuTruong::nhap(std::istream& luong){
+bool ThuThuTruong::nhap(istream& luong){
     ThuThuTruong tam;
     if(!tam.Nguoi::nhap(luong)){
         return false;
@@ -67,9 +68,9 @@ void ThuThuTruong::xuat() const{
     xuatDocGiaRieng();
     xuatGiangVienRieng();
     xuatNhanVienRieng();
-    std::cout << "Khu vuc quan ly: " << khuVucQuanLy << '\n';
-    std::cout << "So nhan vien quan ly: " << soNhanVienQuanLy << '\n';
-    std::cout << "He so phu cap: " << heSoPhuCap << '\n';
+    cout << "Khu vuc quan ly: " << khuVucQuanLy << '\n';
+    cout << "So nhan vien quan ly: " << soNhanVienQuanLy << '\n';
+    cout << "He so phu cap: " << heSoPhuCap << '\n';
 }
 
 //=====ham tinh thu nhap=====
@@ -77,7 +78,7 @@ double ThuThuTruong::tinhThuNhap() const{
     return tinhLuong() + heSoPhuCap * 2000000;
 }
 
-std::string ThuThuTruong::layMa() const{
+string ThuThuTruong::layMa() const{
     return NhanVienThuThu::layMa();
 }
 
@@ -89,14 +90,14 @@ double ThuThuTruong::layPhuCap() const{
     return heSoPhuCap;
 }
 
-void ThuThuTruong::ghi(std::ostream& tep) const{
+void ThuThuTruong::ghi(ostream& tep) const{
     ghiNguoi(tep);
     ghiDocGiaRieng(tep);
     ghiGiangVienRieng(tep);
     ghiNhanVienRieng(tep);
     tep << khuVucQuanLy << '\n';
     tep << soNhanVienQuanLy << '\n';
-    tep << std::setprecision(17) << heSoPhuCap << '\n';
+    tep << setprecision(17) << heSoPhuCap << '\n';
 }
 
 //=====ham xem va duyet vi pham=====
@@ -104,7 +105,7 @@ void ThuThuTruong::xemNhatKyViPham(const QuanLyViPham& quanLy) const{
     quanLy.hienThi();
 }
 
-bool ThuThuTruong::duyetViPham(QuanLyViPham& quanLy, const std::string& ma) const{
+bool ThuThuTruong::duyetViPham(QuanLyViPham& quanLy, const string& ma) const{
     if(!hopLe()){
         return false;
     }

@@ -2,6 +2,7 @@
 #include "PhieuMuon.h"
 #include "Tep.h"
 #include "TepMuonTra.h"
+using namespace std;
 
 //=====ham ghi vi pham=====
 bool QuanLyViPham::them(const NhatKyViPham& viPham){
@@ -22,7 +23,7 @@ bool QuanLyViPham::ghiViPham(const PhieuMuon& phieu){
 }
 
 //=====ham tim kiem=====
-NhatKyViPham* QuanLyViPham::timTheoMa(const std::string& ma){
+NhatKyViPham* QuanLyViPham::timTheoMa(const string& ma){
     for(int i = 0; i < ds.laySoLuong(); i++){
         if(ds[i].layMa() == ma){
             return &ds[i];
@@ -31,7 +32,7 @@ NhatKyViPham* QuanLyViPham::timTheoMa(const std::string& ma){
     return nullptr;
 }
 
-const NhatKyViPham* QuanLyViPham::timTheoMa(const std::string& ma) const{
+const NhatKyViPham* QuanLyViPham::timTheoMa(const string& ma) const{
     for(int i = 0; i < ds.laySoLuong(); i++){
         if(ds[i].layMa() == ma){
             return &ds[i];
@@ -40,7 +41,7 @@ const NhatKyViPham* QuanLyViPham::timTheoMa(const std::string& ma) const{
     return nullptr;
 }
 
-const NhatKyViPham* QuanLyViPham::timTheoPhieu(const std::string& ma) const{
+const NhatKyViPham* QuanLyViPham::timTheoPhieu(const string& ma) const{
     for(int i = 0; i < ds.laySoLuong(); i++){
         if(ds[i].layMaPhieu() == ma){
             return &ds[i];
@@ -49,7 +50,7 @@ const NhatKyViPham* QuanLyViPham::timTheoPhieu(const std::string& ma) const{
     return nullptr;
 }
 
-int QuanLyViPham::timTheoDocGia(const std::string& ma) const{
+int QuanLyViPham::timTheoDocGia(const string& ma) const{
     int n = 0;
     for(int i = 0; i < ds.laySoLuong(); i++){
         if(ds[i].layMaDocGia() == ma){
@@ -60,7 +61,7 @@ int QuanLyViPham::timTheoDocGia(const std::string& ma) const{
     return n;
 }
 
-int QuanLyViPham::demViPham(const std::string& maDocGia) const{
+int QuanLyViPham::demViPham(const string& maDocGia) const{
     int n = 0;
     for(int i = 0; i < ds.laySoLuong(); i++){
         if(ds[i].layMaDocGia() == maDocGia){
@@ -73,7 +74,7 @@ int QuanLyViPham::demViPham(const std::string& maDocGia) const{
 //=====ham xuat=====
 void QuanLyViPham::hienThi() const{
     if(ds.laySoLuong() == 0){
-        std::cout << "Danh sach rong\n";
+        cout << "Danh sach rong\n";
     }
     for(int i = 0; i < ds.laySoLuong(); i++){
         ds[i].xuat();
@@ -88,11 +89,11 @@ void QuanLyViPham::lietKeChuaThanhToan() const{
             n++;
         }
     }
-    std::cout << "So vi pham chua thanh toan: " << n << '\n';
+    cout << "So vi pham chua thanh toan: " << n << '\n';
 }
 
 //=====ham thanh toan va duyet=====
-bool QuanLyViPham::thanhToanPhat(const std::string& ma){
+bool QuanLyViPham::thanhToanPhat(const string& ma){
     NhatKyViPham* viPham = timTheoMa(ma);
     if(viPham == nullptr){
         return false;
@@ -100,7 +101,7 @@ bool QuanLyViPham::thanhToanPhat(const std::string& ma){
     return viPham->thanhToanPhat();
 }
 
-bool QuanLyViPham::duyet(const std::string& ma, const std::string& nguoiDuyet){
+bool QuanLyViPham::duyet(const string& ma, const string& nguoiDuyet){
     NhatKyViPham* viPham = timTheoMa(ma);
     if(viPham == nullptr){
         return false;
@@ -141,7 +142,7 @@ const NhatKyViPham* QuanLyViPham::lay(int k) const{
 }
 
 //=====ham doc ghi tep=====
-bool QuanLyViPham::luu(const std::string& thuMuc, std::string& loi) const{
+bool QuanLyViPham::luu(const string& thuMuc, string& loi) const{
     loi.clear();
     if(ds.laySoLuong() > 1000000){
         loi = "So ban ghi vuot gioi han dinh dang tep";
@@ -160,7 +161,7 @@ bool QuanLyViPham::luu(const std::string& thuMuc, std::string& loi) const{
             }
         }
     }
-    std::ostringstream noiDung;
+    ostringstream noiDung;
     ghiDauTep(noiDung, ds.laySoLuong());
     for(int i = 0; i < ds.laySoLuong(); i++){
         ds[i].ghi(noiDung);
@@ -172,9 +173,9 @@ bool QuanLyViPham::luu(const std::string& thuMuc, std::string& loi) const{
     return ghiTepMuonTra(thuMuc + "/NhatKyViPham.txt", noiDung.str(), loi);
 }
 
-bool QuanLyViPham::doc(const std::string& thuMuc, std::string& loi){
+bool QuanLyViPham::doc(const string& thuMuc, string& loi){
     loi.clear();
-    std::ifstream tep(thuMuc + "/NhatKyViPham.txt");
+    ifstream tep(thuMuc + "/NhatKyViPham.txt");
     int n = 0;
     if(!tep || !docDauTep(tep, n)){
         loi = "Khong doc duoc dau tep NhatKyViPham";

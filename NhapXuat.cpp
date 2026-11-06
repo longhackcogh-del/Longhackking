@@ -2,25 +2,26 @@
 #include <cctype>
 #include <ctime>
 #include <iomanip>
+using namespace std;
 
 //=====ham xuat tien=====
-void xuatTien(std::ostream& luong, double tien){
-    std::ios::fmtflags dinhDangCu = luong.flags();
-    std::streamsize doChinhXacCu = luong.precision();
-    luong << std::fixed << std::setprecision(0) << tien;
+void xuatTien(ostream& luong, double tien){
+    ios::fmtflags dinhDangCu = luong.flags();
+    streamsize doChinhXacCu = luong.precision();
+    luong << fixed << setprecision(0) << tien;
     luong.flags(dinhDangCu);
     luong.precision(doChinhXacCu);
 }
 
 //=====ham kiem tra chuoi=====
-bool chuoiHopLe(const std::string& chuoi){
+bool chuoiHopLe(const string& chuoi){
     bool coChu = false;
     for(unsigned int i = 0; i < chuoi.size(); i++){
         unsigned char kyTu = static_cast<unsigned char>(chuoi[i]);
         if(kyTu == '\r' || kyTu == '\n'){
             return false;
         }
-        if(!std::isspace(kyTu)){
+        if(!isspace(kyTu)){
             coChu = true;
         }
     }
@@ -28,7 +29,7 @@ bool chuoiHopLe(const std::string& chuoi){
 }
 
 //=====ham kiem tra ngay=====
-bool ngayHopLe(const std::string& ngay){
+bool ngayHopLe(const string& ngay){
     if(ngay.size() != 10){
         return false;
     }
@@ -59,7 +60,7 @@ bool ngayHopLe(const std::string& ngay){
 }
 
 //=====ham doi ngay thanh so ngay=====
-int doiNgay(const std::string& ngay){
+int doiNgay(const string& ngay){
     if(!ngayHopLe(ngay)){
         return -1;
     }
@@ -81,25 +82,25 @@ int doiNgay(const std::string& ngay){
     return ketQua + d;
 }
 
-std::string ngayHienTai(){
-    std::time_t bayGio = std::time(nullptr);
-    std::tm* ngay = std::localtime(&bayGio);
+string ngayHienTai(){
+    time_t bayGio = time(nullptr);
+    tm* ngay = localtime(&bayGio);
     if(ngay == nullptr){
         return "";
     }
-    std::ostringstream ketQua;
-    ketQua << std::setfill('0') << std::setw(2) << ngay->tm_mday << '/';
-    ketQua << std::setw(2) << ngay->tm_mon + 1 << '/';
-    ketQua << std::setw(4) << ngay->tm_year + 1900;
+    ostringstream ketQua;
+    ketQua << setfill('0') << setw(2) << ngay->tm_mday << '/';
+    ketQua << setw(2) << ngay->tm_mon + 1 << '/';
+    ketQua << setw(4) << ngay->tm_year + 1900;
     return ketQua.str();
 }
 
 //=====ham nhap chuoi=====
-bool nhapChuoi(std::istream& luong, const std::string& loiNhac, std::string& chuoi){
-    if(&luong == &std::cin){
-        std::cout << loiNhac;
+bool nhapChuoi(istream& luong, const string& loiNhac, string& chuoi){
+    if(&luong == &cin){
+        cout << loiNhac;
     }
-    if(!std::getline(luong, chuoi)){
+    if(!getline(luong, chuoi)){
         return false;
     }
     if(!chuoi.empty() && chuoi.back() == '\r'){
@@ -109,8 +110,8 @@ bool nhapChuoi(std::istream& luong, const std::string& loiNhac, std::string& chu
 }
 
 //=====ham doc chuoi dinh dang cu=====
-bool docChuoiCu(std::istream& luong, std::string& chuoi){
-    luong >> std::ws;
+bool docChuoiCu(istream& luong, string& chuoi){
+    luong >> ws;
     chuoi.clear();
     if(luong.peek() != '"'){
         return static_cast<bool>(luong >> chuoi);

@@ -1,5 +1,6 @@
 #include "NhatKyViPham.h"
 #include <iomanip>
+using namespace std;
 
 //=====ham khoi tao=====
 NhatKyViPham::NhatKyViPham(){
@@ -10,7 +11,7 @@ NhatKyViPham::NhatKyViPham(){
     maNguoiDuyet = "-";
 }
 
-NhatKyViPham::NhatKyViPham(std::string ma, std::string phieu, std::string docGia, int soNgay, double tien){
+NhatKyViPham::NhatKyViPham(string ma, string phieu, string docGia, int soNgay, double tien){
     maViPham = ma;
     maPhieu = phieu;
     maDocGia = docGia;
@@ -27,12 +28,12 @@ NhatKyViPham::~NhatKyViPham(){
 bool NhatKyViPham::hopLe() const{
     return chuoiHopLe(maViPham) && chuoiHopLe(maPhieu) && chuoiHopLe(maDocGia)
         && loaiViPham == "Qua han" && soNgayTre > 0
-        && std::isfinite(soTienPhat) && soTienPhat > 0
+        && isfinite(soTienPhat) && soTienPhat > 0
         && chuoiHopLe(maNguoiDuyet);
 }
 
 //=====ham nhap=====
-bool NhatKyViPham::nhap(std::istream& luong){
+bool NhatKyViPham::nhap(istream& luong){
     NhatKyViPham tam;
     int thanhToan = 0;
     if(!nhapChuoi(luong, "Nhap ma vi pham: ", tam.maViPham)){
@@ -72,21 +73,21 @@ bool NhatKyViPham::nhap(std::istream& luong){
 
 //=====ham xuat=====
 void NhatKyViPham::xuat() const{
-    std::cout << "Ma vi pham: " << maViPham << '\n';
-    std::cout << "Ma phieu: " << maPhieu << '\n';
-    std::cout << "Ma doc gia: " << maDocGia << '\n';
-    std::cout << "Loai: " << loaiViPham << '\n';
-    std::cout << "So ngay tre: " << soNgayTre << '\n';
-    std::cout << "Tien phat: ";
-    xuatTien(std::cout, soTienPhat);
-    std::cout << '\n';
+    cout << "Ma vi pham: " << maViPham << '\n';
+    cout << "Ma phieu: " << maPhieu << '\n';
+    cout << "Ma doc gia: " << maDocGia << '\n';
+    cout << "Loai: " << loaiViPham << '\n';
+    cout << "So ngay tre: " << soNgayTre << '\n';
+    cout << "Tien phat: ";
+    xuatTien(cout, soTienPhat);
+    cout << '\n';
     if(daThanhToan){
-        std::cout << "Da thanh toan\n";
+        cout << "Da thanh toan\n";
     }
     else{
-        std::cout << "Chua thanh toan\n";
+        cout << "Chua thanh toan\n";
     }
-    std::cout << "Nguoi duyet: " << maNguoiDuyet << '\n';
+    cout << "Nguoi duyet: " << maNguoiDuyet << '\n';
 }
 
 //=====ham thanh toan=====
@@ -98,7 +99,7 @@ bool NhatKyViPham::thanhToanPhat(){
     return true;
 }
 
-bool NhatKyViPham::duyet(const std::string& maThuThu){
+bool NhatKyViPham::duyet(const string& maThuThu){
     if(!hopLe() || !chuoiHopLe(maThuThu) || maThuThu == "-" || maNguoiDuyet != "-"){
         return false;
     }
@@ -107,13 +108,13 @@ bool NhatKyViPham::duyet(const std::string& maThuThu){
 }
 
 //=====ham ghi tep=====
-void NhatKyViPham::ghi(std::ostream& tep) const{
+void NhatKyViPham::ghi(ostream& tep) const{
     tep << maViPham << '\n';
     tep << maPhieu << '\n';
     tep << maDocGia << '\n';
     tep << loaiViPham << '\n';
     tep << soNgayTre << '\n';
-    tep << std::setprecision(17) << soTienPhat << '\n';
+    tep << setprecision(17) << soTienPhat << '\n';
     if(daThanhToan){
         tep << 1 << '\n';
     }
@@ -123,15 +124,15 @@ void NhatKyViPham::ghi(std::ostream& tep) const{
     tep << maNguoiDuyet << '\n';
 }
 
-std::string NhatKyViPham::layMa() const{
+string NhatKyViPham::layMa() const{
     return maViPham;
 }
 
-std::string NhatKyViPham::layMaPhieu() const{
+string NhatKyViPham::layMaPhieu() const{
     return maPhieu;
 }
 
-std::string NhatKyViPham::layMaDocGia() const{
+string NhatKyViPham::layMaDocGia() const{
     return maDocGia;
 }
 
@@ -147,6 +148,6 @@ bool NhatKyViPham::layDaThanhToan() const{
     return daThanhToan;
 }
 
-std::string NhatKyViPham::layNguoiDuyet() const{
+string NhatKyViPham::layNguoiDuyet() const{
     return maNguoiDuyet;
 }

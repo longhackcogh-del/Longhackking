@@ -1,11 +1,12 @@
 #include "Nguoi.h"
+using namespace std;
 
 //=====ham khoi tao=====
 Nguoi::Nguoi(){
 }
 
-Nguoi::Nguoi(std::string ma, std::string ten, std::string ngay,
-             std::string thu, std::string dienThoai){
+Nguoi::Nguoi(string ma, string ten, string ngay,
+             string thu, string dienThoai){
     maNguoi = ma;
     hoTen = ten;
     ngaySinh = ngay;
@@ -24,15 +25,15 @@ bool Nguoi::hopLe() const{
     if(!chuoiHopLe(email) || !chuoiHopLe(soDienThoai)){
         return false;
     }
-    std::string::size_type a = email.find('@');
-    if(a == std::string::npos || a == 0 || email.find('@', a + 1) != std::string::npos){
+    string::size_type a = email.find('@');
+    if(a == string::npos || a == 0 || email.find('@', a + 1) != string::npos){
         return false;
     }
-    std::string::size_type b = email.find('.', a + 1);
-    if(b == std::string::npos || b <= a + 1 || b + 1 >= email.size()){
+    string::size_type b = email.find('.', a + 1);
+    if(b == string::npos || b <= a + 1 || b + 1 >= email.size()){
         return false;
     }
-    if(email.find_first_of(" \t") != std::string::npos){
+    if(email.find_first_of(" \t") != string::npos){
         return false;
     }
     for(unsigned int i = 0; i < soDienThoai.size(); i++){
@@ -44,7 +45,7 @@ bool Nguoi::hopLe() const{
 }
 
 //=====ham nhap=====
-bool Nguoi::nhap(std::istream& luong){
+bool Nguoi::nhap(istream& luong){
     Nguoi tam;
     if(!nhapChuoi(luong, "Nhap ma nguoi: ", tam.maNguoi)){
         return false;
@@ -70,14 +71,14 @@ bool Nguoi::nhap(std::istream& luong){
 
 //=====ham xuat=====
 void Nguoi::xuat() const{
-    std::cout << "Ma nguoi: " << maNguoi << '\n';
-    std::cout << "Ho ten: " << hoTen << '\n';
-    std::cout << "Ngay sinh: " << ngaySinh << '\n';
-    std::cout << "Email: " << email << '\n';
-    std::cout << "So dien thoai: " << soDienThoai << '\n';
+    cout << "Ma nguoi: " << maNguoi << '\n';
+    cout << "Ho ten: " << hoTen << '\n';
+    cout << "Ngay sinh: " << ngaySinh << '\n';
+    cout << "Email: " << email << '\n';
+    cout << "So dien thoai: " << soDienThoai << '\n';
 }
 
-void Nguoi::ghiNguoi(std::ostream& tep) const{
+void Nguoi::ghiNguoi(ostream& tep) const{
     tep << maNguoi << '\n';
     tep << hoTen << '\n';
     tep << ngaySinh << '\n';
@@ -85,11 +86,11 @@ void Nguoi::ghiNguoi(std::ostream& tep) const{
     tep << soDienThoai << '\n';
 }
 
-std::string Nguoi::layMaNguoi() const{
+string Nguoi::layMaNguoi() const{
     return maNguoi;
 }
 
-std::string Nguoi::layHoTen() const{
+string Nguoi::layHoTen() const{
     return hoTen;
 }
 

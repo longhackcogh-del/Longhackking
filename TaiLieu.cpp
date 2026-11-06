@@ -1,6 +1,7 @@
 #include "TaiLieu.h"
 #include "NhapXuat.h"
 #include <iomanip>
+using namespace std;
 
 //=====ham khoi tao=====
 TaiLieu::TaiLieu(){
@@ -13,7 +14,7 @@ TaiLieu::TaiLieu(){
     giaTri = 0;
 }
 
-TaiLieu::TaiLieu(std::string ma, std::string ten, std::string nxb,
+TaiLieu::TaiLieu(string ma, string ten, string nxb,
                  int nam, int tong, int con, double gia){
     maTaiLieu = ma;
     tenTaiLieu = ten;
@@ -28,11 +29,11 @@ TaiLieu::~TaiLieu(){
 }
 
 //=====ham kiem tra=====
-bool TaiLieu::chuoiHopLe(const std::string& chuoi){
+bool TaiLieu::chuoiHopLe(const string& chuoi){
     return ::chuoiHopLe(chuoi);
 }
 
-bool TaiLieu::ngayHopLe(const std::string& ngay){
+bool TaiLieu::ngayHopLe(const string& ngay){
     return ::ngayHopLe(ngay);
 }
 
@@ -46,12 +47,12 @@ bool TaiLieu::hopLe() const{
     if(soLuongTong < 0 || soLuongCon < 0 || soLuongCon > soLuongTong){
         return false;
     }
-    return std::isfinite(giaTri) && giaTri >= 0;
+    return isfinite(giaTri) && giaTri >= 0;
 }
 
 //=====ham nhap=====
-bool TaiLieu::nhap(std::istream& luong){
-    std::string ma, ten, nxb;
+bool TaiLieu::nhap(istream& luong){
+    string ma, ten, nxb;
     int nam = 0;
     int tong = 0;
     int con = 0;
@@ -92,33 +93,33 @@ bool TaiLieu::nhap(std::istream& luong){
 
 //=====ham xuat=====
 void TaiLieu::xuatChung() const{
-    std::cout << "\nLoai: " << layLoai() << '\n';
-    std::cout << "Ma tai lieu: " << maTaiLieu << '\n';
-    std::cout << "Ten tai lieu: " << tenTaiLieu << '\n';
-    std::cout << "Nha xuat ban: " << nhaXuatBan << '\n';
-    std::cout << "Nam xuat ban: " << namXuatBan << '\n';
-    std::cout << "So luong con/tong: " << soLuongCon << '/' << soLuongTong << '\n';
-    std::cout << "Gia tri: ";
-    xuatTien(std::cout, giaTri);
-    std::cout << '\n';
+    cout << "\nLoai: " << layLoai() << '\n';
+    cout << "Ma tai lieu: " << maTaiLieu << '\n';
+    cout << "Ten tai lieu: " << tenTaiLieu << '\n';
+    cout << "Nha xuat ban: " << nhaXuatBan << '\n';
+    cout << "Nam xuat ban: " << namXuatBan << '\n';
+    cout << "So luong con/tong: " << soLuongCon << '/' << soLuongTong << '\n';
+    cout << "Gia tri: ";
+    xuatTien(cout, giaTri);
+    cout << '\n';
 }
 
 //=====ham ghi tep=====
-void TaiLieu::ghiChung(std::ostream& tep) const{
+void TaiLieu::ghiChung(ostream& tep) const{
     tep << maTaiLieu << '\n';
     tep << tenTaiLieu << '\n';
     tep << nhaXuatBan << '\n';
     tep << namXuatBan << '\n';
     tep << soLuongTong << '\n';
     tep << soLuongCon << '\n';
-    tep << std::setprecision(17) << giaTri << '\n';
+    tep << setprecision(17) << giaTri << '\n';
 }
 
-std::string TaiLieu::layMa() const{
+string TaiLieu::layMa() const{
     return maTaiLieu;
 }
 
-std::string TaiLieu::layTen() const{
+string TaiLieu::layTen() const{
     return tenTaiLieu;
 }
 

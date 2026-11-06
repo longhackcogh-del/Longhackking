@@ -1,5 +1,6 @@
 #include "NhanVienThuThu.h"
 #include <iomanip>
+using namespace std;
 
 //=====ham khoi tao=====
 NhanVienThuThu::NhanVienThuThu(){
@@ -7,9 +8,9 @@ NhanVienThuThu::NhanVienThuThu(){
     heSoLuong = 0;
 }
 
-NhanVienThuThu::NhanVienThuThu(std::string maNguoi, std::string ten, std::string ngay,
-                             std::string email, std::string dienThoai, std::string maNhanVien,
-                             std::string ca, std::string chuc, double luong, double heSo)
+NhanVienThuThu::NhanVienThuThu(string maNguoi, string ten, string ngay,
+                             string email, string dienThoai, string maNhanVien,
+                             string ca, string chuc, double luong, double heSo)
     : Nguoi(maNguoi, ten, ngay, email, dienThoai){
     this->maNhanVien = maNhanVien;
     caLamViec = ca;
@@ -23,13 +24,13 @@ NhanVienThuThu::~NhanVienThuThu(){
 
 bool NhanVienThuThu::hopLe() const{
     return Nguoi::hopLe() && chuoiHopLe(maNhanVien) && chuoiHopLe(caLamViec)
-        && chuoiHopLe(chucVu) && std::isfinite(luongCoBan) && luongCoBan > 0
-        && std::isfinite(heSoLuong) && heSoLuong > 0
-        && std::isfinite(luongCoBan * heSoLuong);
+        && chuoiHopLe(chucVu) && isfinite(luongCoBan) && luongCoBan > 0
+        && isfinite(heSoLuong) && heSoLuong > 0
+        && isfinite(luongCoBan * heSoLuong);
 }
 
 //=====ham nhap=====
-bool NhanVienThuThu::nhapNhanVienRieng(std::istream& luong){
+bool NhanVienThuThu::nhapNhanVienRieng(istream& luong){
     if(!nhapChuoi(luong, "Nhap ma nhan vien: ", maNhanVien)){
         return false;
     }
@@ -48,7 +49,7 @@ bool NhanVienThuThu::nhapNhanVienRieng(std::istream& luong){
     return luongCoBan > 0 && heSoLuong > 0;
 }
 
-bool NhanVienThuThu::nhap(std::istream& luong){
+bool NhanVienThuThu::nhap(istream& luong){
     NhanVienThuThu tam;
     if(!tam.Nguoi::nhap(luong) || !tam.nhapNhanVienRieng(luong)){
         return false;
@@ -62,13 +63,13 @@ bool NhanVienThuThu::nhap(std::istream& luong){
 
 //=====ham xuat=====
 void NhanVienThuThu::xuatNhanVienRieng() const{
-    std::cout << "Ma nhan vien: " << maNhanVien << '\n';
-    std::cout << "Ca lam viec: " << caLamViec << '\n';
-    std::cout << "Chuc vu: " << chucVu << '\n';
-    std::cout << "Luong co ban: ";
-    xuatTien(std::cout, luongCoBan);
-    std::cout << '\n';
-    std::cout << "He so luong: " << heSoLuong << '\n';
+    cout << "Ma nhan vien: " << maNhanVien << '\n';
+    cout << "Ca lam viec: " << caLamViec << '\n';
+    cout << "Chuc vu: " << chucVu << '\n';
+    cout << "Luong co ban: ";
+    xuatTien(cout, luongCoBan);
+    cout << '\n';
+    cout << "He so luong: " << heSoLuong << '\n';
 }
 
 void NhanVienThuThu::xuat() const{
@@ -81,11 +82,11 @@ double NhanVienThuThu::tinhLuong() const{
     return luongCoBan * heSoLuong;
 }
 
-std::string NhanVienThuThu::layMa() const{
+string NhanVienThuThu::layMa() const{
     return maNhanVien;
 }
 
-std::string NhanVienThuThu::layCa() const{
+string NhanVienThuThu::layCa() const{
     return caLamViec;
 }
 
@@ -93,15 +94,15 @@ double NhanVienThuThu::layHeSoLuong() const{
     return heSoLuong;
 }
 
-void NhanVienThuThu::ghiNhanVienRieng(std::ostream& tep) const{
+void NhanVienThuThu::ghiNhanVienRieng(ostream& tep) const{
     tep << maNhanVien << '\n';
     tep << caLamViec << '\n';
     tep << chucVu << '\n';
-    tep << std::setprecision(17) << luongCoBan << '\n';
+    tep << setprecision(17) << luongCoBan << '\n';
     tep << heSoLuong << '\n';
 }
 
-void NhanVienThuThu::ghi(std::ostream& tep) const{
+void NhanVienThuThu::ghi(ostream& tep) const{
     ghiNguoi(tep);
     ghiNhanVienRieng(tep);
 }

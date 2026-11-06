@@ -11,7 +11,7 @@
 #include <windows.h>
 #endif
 using namespace std;
-namespace fs = std::filesystem;
+namespace fs = filesystem;
 
 static string docChu(const fs::path& tep){
     ifstream doc(tep, ios::binary);
